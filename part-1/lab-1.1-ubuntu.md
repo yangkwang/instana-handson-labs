@@ -8,16 +8,30 @@ $ cat /etc/os-release
 $ uname -a
 ```
 
-## 2. Check Prerequisites
+## 2. Mounting a bigger disk
+```sh
+# get the list of disk 
+$ sudo lsblk
+
+$ sudo fdisk /dev/xvde
+$ sudo mkfs -t ext4 /dev/xvde1
+$ sudo mount -t ext4 /dev/xvde1 /opt
+
+$ sudo vi /etc/fstab
+# Append the following line as the last row
+          /dev/xvde1 /opt ext4 defaults,noatime 0 0
+```
+
+## 3. Check Prerequisites
 
 ```sh
 # Test the connectivity
 # Make sure the netcat is installed
-$ sudo dnf install nc -y
+$ sudo apt-get install netcat
 $ nc -vz auth-infra.instana.io 443
 
 # Mount or simply create some data folders for simplicity purposes
-$ sudo mkdir /mnt/{data,metrics,traces}
+$ sudo mkdir /opt/{data,metrics,traces}
 
 # TLS
 $ curl -sLO https://github.com/FiloSottile/mkcert/releases/download/v1.4.3/mkcert-v1.4.3-linux-amd64
@@ -26,11 +40,11 @@ $ chmod +x mkcert-v1.4.3-linux-amd64 && sudo mv mkcert-v1.4.3-linux-amd64 /usr/l
 # Create a TLS key pair with <INSTANA SERVER IP>.nip.io as its CN
 # or skip this if you're going to use your key pair
 # NOTE: PLEASE CHANGE TO YOUR IP
-$ INSTANA_SERVER_IP=168.1.53.231 && \
+$ INSTANA_SERVER_IP=169.56.19.77 && \
   mkcert -cert-file tls.crt -key-file tls.key "${INSTANA_SERVER_IP}.nip.io" "${INSTANA_SERVER_IP}"
 ```
 
-## 3. Install Docker
+## 4. Install Docker
 
 ```sh
 # Remove some legacy components, if any

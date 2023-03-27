@@ -48,20 +48,43 @@ $ INSTANA_SERVER_IP=169.56.19.77 && \
 
 ```sh
 # Remove some legacy components, if any
-sudo dnf remove docker \
-    docker-client \
-    docker-client-latest \
-    docker-common \
-    docker-latest \
-    docker-latest-logrotate \
-    docker-logrotate \
-    docker-engine \
-    podman \
-    runc
+$ sudo apt-get remove docker docker-engine docker.io containerd runc
 
-# Add Docker CE's repo and install Docker CE
-sudo dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
-sudo dnf install -y docker-ce docker-ce-cli containerd.io
+# Update the apt package index and install packages to allow apt to use a repository over HTTPS:
+sudo apt-get update
+sudo apt-get install \
+    ca-certificates \
+    curl \
+    gnupg
+
+# Add Docker’s official GPG key:
+sudo mkdir -m 0755 -p /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+
+# Use the following command to set up the repository:
+echo \
+  "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+# Update the apt package index:
+sudo apt-get update
+
+# To install a specific version of Docker Engine, start by listing the available versions in the repository:
+apt-cache madison docker-ce | awk '{ print $3 }'
+
+# Select the desired version and install:
+VERSION_STRING=5:20.10.23~3-0~ubuntu-focal
+sudo apt-get install docker-ce=$VERSION_STRING docker-ce-cli=$VERSION_STRING containerd.io docker-buildx-plugin docker-compose-plugin
+
+# Verify that the Docker Engine installation is successful by running the hello-world image:
+sudo docker run hello-world
+
+# Moving /var/lib/docker to disk with more space
+sudo systemctl stop docker
+sudo mkdir /opt/docker
+sudo mv /var/lib/docker /opt/docker
+sudo ln -s /opt/docker /var/lib/docker
 
 # Start Docker daemon process
 sudo systemctl enable docker

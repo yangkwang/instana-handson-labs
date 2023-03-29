@@ -32,6 +32,8 @@ $ nc -vz auth-infra.instana.io 443
 
 # Mount or simply create some data folders for simplicity purposes
 $ sudo mkdir /opt/{data,metrics,traces}
+$ sudo mkdir /opt/log
+$ sudo mkdir /opt/log/instana
 
 # TLS
 $ curl -sLO https://github.com/FiloSottile/mkcert/releases/download/v1.4.3/mkcert-v1.4.3-linux-amd64
@@ -42,6 +44,8 @@ $ chmod +x mkcert-v1.4.3-linux-amd64 && sudo mv mkcert-v1.4.3-linux-amd64 /usr/l
 # NOTE: PLEASE CHANGE TO YOUR IP
 $ INSTANA_SERVER_IP=169.56.19.77 && \
   mkcert -cert-file tls.crt -key-file tls.key "${INSTANA_SERVER_IP}.nip.io" "${INSTANA_SERVER_IP}"
+
+# take note of the path to tls.crt (signed certificate file) and tls.key (private key file) 
 ```
 
 ## 4. Install Docker
@@ -99,31 +103,23 @@ sudo usermod -aG docker $USER
 
 > Note: Please re-login to the VM to take effect.
 
-## 4. Install Instana Server
+## 5. Install Instana Server
 
 ```sh
-cat <<EOF | sudo tee /etc/yum.repos.d/Instana-Product.repo
-[instana-product]
-name=Instana-Product
-baseurl=https://self-hosted.instana.io/rpm/release/product/rpm/generic/x86_64/Packages
-enabled=1
-gpgcheck=1
-repo_gpgcheck=1
-gpgkey=https://self-hosted.instana.io/signing_key.gpg
-priority=5
-sslverify=1
-#proxy=http://x.x.x.x:8080
-#proxy_username=
-#proxy_password=
+#As root, run the following commands:
+echo "deb [arch=amd64] https://self-hosted.instana.io/apt generic main" > /etc/apt/sources.list.d/instana-product.list
+wget -qO - "https://self-hosted.instana.io/signing_key.gpg" | apt-key add -
+apt-get update
+apt-get install instana-console
+
+# To avoid getting major updates during automated upgrades, run the following commands:
+cat >/etc/apt/preferences.d/instana-console <<EOF
+Package: instana-console
+Pin: version 243-5
+Pin-Priority: 1000
 EOF
 
-sudo dnf makecache -y
-sudo dnf install -y instana-console
-
 instana version
-
-sudo dnf install python3-dnf-plugin-versionlock -y
-sudo dnf versionlock add instana-console
 
 # Finally, let’s kick off the init process
 sudo instana init

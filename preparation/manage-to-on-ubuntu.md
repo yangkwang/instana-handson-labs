@@ -10,6 +10,10 @@ ssh itzuser@<manage-to ip address> -p 2223 -i <ssh key file>
 ```sh
 lsblk
 ```
+
+<picture>
+  <img alt="image" src="./assets/images/disk-dev.png">
+</picture>
 ![image](/assets/images/disk-dev.png)
 
 ```sh

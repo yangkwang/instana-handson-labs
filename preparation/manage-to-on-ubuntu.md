@@ -18,15 +18,19 @@ lsblk
 ```sh
 sudo fdisk /dev/xvde
 ```
+
 <picture>
-  <img alt="image" src="./assets/images/fdisk.png">
+  <img alt="image2" src="./assets/images/fdisk.png">
 </picture>
+
 ```sh
 sudo mkfs -t ext4 /dev/xvde1
 ```
+
 <picture>
-  <img alt="image" src="./assets/images/mkfs.png">
+  <img alt="image3" src="./assets/images/mkfs.png">
 </picture>
+
 ```sh
 sudo mount -t ext4 /dev/xvde1 /opt
 
@@ -35,7 +39,7 @@ vi /etc/fstab
 
 ```
 <picture>
-  <img alt="image" src="./assets/images/fstab.png">
+  <img alt="image4" src="./assets/images/fstab.png">
 </picture>
 
 

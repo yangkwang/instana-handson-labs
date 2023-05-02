@@ -5,7 +5,7 @@ This repo contains the copy-paste friendly scripts/commands for my Instana hands
 How to obtain it?
 
 ```sh
-git clone https://github.com/brightzheng100/instana-handson-labs.git
+git clone https://github.com/yangkwang/instana-handson-labs.git
 cd instana-handson-labs
 ls -l
 ```

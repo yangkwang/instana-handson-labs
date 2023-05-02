@@ -17,6 +17,9 @@ lsblk
 
 ```sh
 sudo fdisk /dev/xvde
+<picture>
+  <img alt="image" src="./assets/images/fdisk.png">
+</picture>
 sudo mkfs -t ext4 /dev/xvde1
 sudo mount -t ext4 /dev/xvde1 /opt
 

@@ -10,19 +10,19 @@ ssh itzuser@<manage-to ip address> -p 2223 -i <ssh key file>
 ```sh
 lsblk
 ```
-NAME    MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
-loop0     7:0    0 63.3M  1 loop /snap/core20/1822
-loop1     7:1    0 91.9M  1 loop /snap/lxd/24061
-loop2     7:2    0 49.8M  1 loop /snap/snapd/17950
-loop3     7:3    0 63.3M  1 loop /snap/core20/1852
-xvda    202:0    0  100G  0 disk
-├─xvda1 202:1    0    1G  0 part /boot
-└─xvda2 202:2    0   99G  0 part /
-xvdb    202:16   0    2G  0 disk
-└─xvdb1 202:17   0    2G  0 part [SWAP]
-xvdc    202:32   0  100G  0 disk
-xvde    202:64   0 1000G  0 disk
-xvdh    202:112  0   64M  0 disk
+#NAME    MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+#loop0     7:0    0 63.3M  1 loop /snap/core20/1822
+#loop1     7:1    0 91.9M  1 loop /snap/lxd/24061
+#loop2     7:2    0 49.8M  1 loop /snap/snapd/17950
+#loop3     7:3    0 63.3M  1 loop /snap/core20/1852
+#xvda    202:0    0  100G  0 disk
+#├─xvda1 202:1    0    1G  0 part /boot
+#└─xvda2 202:2    0   99G  0 part /
+#xvdb    202:16   0    2G  0 disk
+#└─xvdb1 202:17   0    2G  0 part [SWAP]
+#xvdc    202:32   0  100G  0 disk
+#xvde    202:64   0 1000G  0 disk
+#xvdh    202:112  0   64M  0 disk
 
 ```sh
 sudo fdisk /dev/xvde

@@ -17,16 +17,27 @@ lsblk
 
 ```sh
 sudo fdisk /dev/xvde
+```
 <picture>
   <img alt="image" src="./assets/images/fdisk.png">
 </picture>
+```sh
 sudo mkfs -t ext4 /dev/xvde1
+```
+<picture>
+  <img alt="image" src="./assets/images/mkfs.png">
+</picture>
+```sh
 sudo mount -t ext4 /dev/xvde1 /opt
 
 vi /etc/fstab
      /dev/xvde1 /opt ext4 defaults,noatime 0 0
 
 ```
+<picture>
+  <img alt="image" src="./assets/images/fstab.png">
+</picture>
+
 
 ## Install Docker
 

@@ -108,7 +108,6 @@ sudo docker run hello-world
 
 # Moving /var/lib/docker to disk with more space
 sudo systemctl stop docker
-sudo mkdir /opt/docker
 sudo mv /var/lib/docker /opt/docker
 sudo ln -s /opt/docker /var/lib/docker
 

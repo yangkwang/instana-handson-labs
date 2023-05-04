@@ -77,6 +77,17 @@ Re-login to the VM and try:
 docker run hello-world
 ```
 
+Move the docker /var/lib/docker/ to bigger disk partition:
+```sh
+sudo systemctl stop docker
+sudo mv /var/lib/docker/ /opt/docker
+sudo ln -s /opt/docker /var/lib/docker
+
+sudo systemctl start docker
+
+docker run hello-world
+```
+
 ## Install necessary tools
 
 1. Install “kind” – it’s a tool for creating Kubernetes in Docker, that why it’s called “kind”:

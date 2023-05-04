@@ -219,9 +219,24 @@ $ sudo instana license verify
 </picture>
 
 ```sh
+# The output might look like this:
 
+```
+<picture>
+  <img alt="image" src="./assets/images/agent-4.png">
+</picture>
 
-# After installing the agent by running the generated one-liner command from Instana UI:
+```sh
+# The agent will be enabled, up and running by default. Or we can enable and start it manually, if not.
+# Have a check by using “systemctl” CLI:
+
+$ sudo systemctl is-enabled instana-agent
+
+# Or we can enable and start it manually 
+$ sudo systemctl enable instana-agent 
+$ sudo systemctl start instana-agent 
+$ sudo systemctl status instana-agent
+
 
 ```
 

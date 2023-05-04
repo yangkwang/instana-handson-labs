@@ -62,7 +62,7 @@ $ sudo chmod +x mkcert-v1.4.3-linux-amd64 && sudo mv mkcert-v1.4.3-linux-amd64 /
 # Create a TLS key pair with <INSTANA SERVER IP>.nip.io as its CN
 # or skip this if you're going to use your key pair
 # NOTE: PLEASE CHANGE TO YOUR IP
-$ INSTANA_SERVER_IP=169.56.19.77 && \
+$ INSTANA_SERVER_IP=<Instana Server ip address> && \
   sudo mkcert -cert-file tls.crt -key-file tls.key "${INSTANA_SERVER_IP}.nip.io" "${INSTANA_SERVER_IP}"
 
 # take note of the path to tls.crt (signed certificate file) and tls.key (private key file) 

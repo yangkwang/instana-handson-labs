@@ -166,11 +166,12 @@ sudo instana init
 </picture>
 
 ```sh
-Click “Go to instana!” button to start with the journey:
+# Click “Go to instana!” button to start with the journey:
 ```
 <picture>
   <img alt="image" src="./assets/images/firstlogin-2.png">
 </picture>
+
 ## 7. License
 
 ```sh
@@ -208,7 +209,9 @@ $ sudo instana license verify
 
 ```sh
 
-# Copy the one-liner command, paste into the console, with small manual update to enable the INFRA mode, by adding the -m infra part – note: the default will be APM mode which is not a desired mode for self-monitoring:
+# Copy the one-liner command, paste into the console, with small manual update to enable the INFRA mode, 
+# by adding the -m infra part – note: the default will be APM mode which is not a desired 
+# mode for self-monitoring:
 ```
 
 <picture>

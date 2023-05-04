@@ -240,14 +240,15 @@ $ sudo systemctl status instana-agent
 
 ```
 
+## 8.2 Further Configure Agent
+
 ```sh
-$ sudo systemctl is-enabled instana-agent
-
-# Or we can enable and start it manually
-$ sudo systemctl enable instana-agent
-$ sudo systemctl start instana-agent
-
-$ sudo systemctl status instana-agent
+# It’s a good practice to configure the zone info of the agent so that 
+# the host can be grouped properly within the Infrastructure View.
+# And I would consider having separated configuration files for specific 
+# custom configuration sections is a good practice too – these configuration 
+# files will be hot-reloaded by Instana agent without a need 
+# to restart the agent, which is super cool!
 
 # Configure zone
 sudo touch /opt/instana/agent/etc/instana/configuration-zone.yaml

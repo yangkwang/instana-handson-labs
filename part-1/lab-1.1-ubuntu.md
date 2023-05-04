@@ -287,7 +287,65 @@ eum {
   tracking_base_url = "${EUM_ENDPOINT}/eum/"
 }
 EOF
+```
 
+## 8.3 Enhance the EUM settings
+
+```sh
+# By default, the code snippet generated from website monitoring might 
+# be using the internal port, which is HTTP-based port 2999. For example:
+
+<script> 
+  (function(s,t,a,n){s[t]||(s[t]=a,n=s[a]=function(){n.q.push(arguments)}, 
+  n.q=[],n.v=2,n.l=1*new Date)})(window,"InstanaEumObject","ineum"); 
+
+  ineum('reportingUrl', 'http://168.1.53.231.nip.io:2999/'); 
+  ineum('key', 'fjwzPxrwRO2ShJfRmPqOTA'); 
+  ineum('trackSessions'); 
+</script> 
+<script defer crossorigin="anonymous" 
+src="http://<Instana Server IP>.nip.io:2999/eum.min.js"></script>
+
+# We should expose the ports proxied by embedded Nginx, so that they 
+# could be further exposed by the enterprise’s load-balancer to become the final EUM endpoint(s):
+#   - 446 for HTTPS, and
+#   - 86 for HTTP
+# So it’s like: enterprise load-balancer -> exposed 446/86 Instana ports -> 2999 internal port.
+# This can be achieved by:
+
+# Set up the proper EUM endpoint which will proxy to the :2999 internal port 
+# DO REPLACE IT WITH YOUR ENDPOINT!!! 
+# Ref: https://www.ibm.com/docs/en/obi/current?topic=installer-configuring-end-user-monitoring 
+```
+
+```sh
+EUM_ENDPOINT="https://<Instana Server IP>.nip.io:446" && \ 
+cat | sudo tee -a settings.hcl <<EOF 
+eum { 
+  tracking_base_url = "${EUM_ENDPOINT}/eum/" 
+} 
+EOF
+```
+
+```sh
 # Then apply it
 sudo instana update -f settings.hcl
 ```
+
+```sh
+# Once the update is complete, we can see the website configuration like this:
+
+<script> 
+  (function(s,t,a,n){s[t]||(s[t]=a,n=s[a]=function(){n.q.push(arguments)}, 
+  n.q=[],n.v=2,n.l=1*new Date)})(window,"InstanaEumObject","ineum"); 
+  ineum('reportingUrl', 'https://<Instana Server IP>.nip.io:446/eum/'); 
+  ineum('key', 'fjwzPxrwRO2ShJfRmPqOTA'); 
+  ineum('trackSessions'); 
+</script> 
+<script defer crossorigin="anonymous" 
+src="https://<Instana Server IP>.nip.io:446/eum/eum.min.js"></script>
+
+```
+
+
+

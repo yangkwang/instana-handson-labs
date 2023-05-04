@@ -151,9 +151,14 @@ sudo instana init
   <img alt="image" src="./assets/images/Instana-init.png">
 </picture>
 
+# After around 30 min
+<picture>
+  <img alt="image" src="./assets/images/init-complete.png">
+</picture>
 
 ## 5. First login
 
+# Launch from browser: https://52.118.165.235.nip.io
 
 ## 6. License
 

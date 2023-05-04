@@ -128,6 +128,7 @@ sudo usermod -aG docker $USER
 
 ```sh
 #As root, run the following commands:
+sudo -i
 echo "deb [arch=amd64] https://self-hosted.instana.io/apt generic main" > /etc/apt/sources.list.d/instana-product.list
 wget -qO - "https://self-hosted.instana.io/signing_key.gpg" | apt-key add -
 apt-get update
@@ -136,7 +137,7 @@ apt-get install instana-console
 # To avoid getting major updates during automated upgrades, run the following commands:
 cat >/etc/apt/preferences.d/instana-console <<EOF
 Package: instana-console
-Pin: version 243-5
+Pin: version 247-0-1
 Pin-Priority: 1000
 EOF
 

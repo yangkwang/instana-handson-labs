@@ -158,8 +158,19 @@ sudo instana init
 
 ## 6. First login
 ```sh
+# By following the info printed out once the installation is done, we can login to Instana:
 # Launch from browser: https://<Instana Server IP>.nip.io
 ```
+<picture>
+  <img alt="image" src="./assets/images/firstlogin-1.png">
+</picture>
+
+```sh
+Click “Go to instana!” button to start with the journey:
+```
+<picture>
+  <img alt="image" src="./assets/images/firstlogin-2.png">
+</picture>
 ## 7. License
 
 ```sh
@@ -175,7 +186,41 @@ $ sudo instana license verify
 
 ## 8. Post Actions
 
-After installing the agent by running the generated one-liner command from Instana UI:
+## 8.1 Install Agent for Instana
+
+```sh
+# “Who monitors the monitors?”
+# Well, we now have the answer in Instana: Instana monitors itself by its agent!
+# 
+# We recommend monitoring the health of your self-hosted Instana server with the use of an 
+# Instana agent running in Infrastructure-only mode. This will allow a number of health 
+# checks and metrics to be collected for your Instana server.
+# 
+```
+<picture>
+  <img alt="image" src="./assets/images/agent-1.png">
+</picture>
+
+<picture>
+  <img alt="image" src="./assets/images/agent-2.png">
+</picture>
+
+
+```sh
+
+# Copy the one-liner command, paste into the console, with small manual update to enable the INFRA mode, by adding the -m infra part – note: the default will be APM mode which is not a desired mode for self-monitoring:
+```
+
+<picture>
+  <img alt="image" src="./assets/images/agent-3.png">
+</picture>
+
+```sh
+
+
+# After installing the agent by running the generated one-liner command from Instana UI:
+
+```
 
 ```sh
 $ sudo systemctl is-enabled instana-agent

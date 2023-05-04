@@ -272,6 +272,9 @@ com.instana.plugin.host:
     - 'poc'
     - 'instana'
 EOF
+
+sudo instana update -f settings.hcl
+
 ```
 
 ```sh

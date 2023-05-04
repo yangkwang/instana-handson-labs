@@ -1,26 +1,46 @@
 # Lab 1.1 – Install Instana Server Manually
-
-## 1. Spin up the VM
-
+## Access Instana-Server VM
 ```sh
-$ cat /etc/os-release
-
-$ uname -a
+ssh itzuser@<Instana Server ip address> -p 2223 -i <ssh key file>
 ```
 
-## 2. Mounting a bigger disk
+## 2. Mount additional disk space
 ```sh
-# get the list of disk 
-$ sudo lsblk
-
-$ sudo fdisk /dev/xvde
-$ sudo mkfs -t ext4 /dev/xvde1
-$ sudo mount -t ext4 /dev/xvde1 /opt
-
-$ sudo vi /etc/fstab
-# Append the following line as the last row
-          /dev/xvde1 /opt ext4 defaults,noatime 0 0
+lsblk
 ```
+
+<picture>
+  <img alt="image" src="./assets/images/disk-dev.png">
+</picture>
+
+```sh
+sudo fdisk /dev/xvde
+```
+
+<picture>
+  <img alt="image2" src="./assets/images/fdisk.png">
+</picture>
+
+```sh
+sudo mkfs -t ext4 /dev/xvde1
+```
+
+<picture>
+  <img alt="image3" src="./assets/images/mkfs.png">
+</picture>
+
+```sh
+sudo mount -t ext4 /dev/xvde1 /opt
+
+vi /etc/fstab
+     /dev/xvde1 /opt ext4 defaults,noatime 0 0
+
+```
+<picture>
+  <img alt="image4" src="./assets/images/fstab.png">
+</picture>
+
+
 
 ## 3. Check Prerequisites
 

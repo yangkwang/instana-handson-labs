@@ -65,7 +65,8 @@ $ sudo chmod +x mkcert-v1.4.3-linux-amd64 && sudo mv mkcert-v1.4.3-linux-amd64 /
 $ INSTANA_SERVER_IP=<Instana Server ip address> && \
   sudo mkcert -cert-file tls.crt -key-file tls.key "${INSTANA_SERVER_IP}.nip.io" "${INSTANA_SERVER_IP}"
 
-# take note of the path to tls.crt (signed certificate file) and tls.key (private key file) 
+# NOTE : take note of the path to tls.crt (signed certificate file) and tls.key (private key file) 
+#        and the FQDN "${INSTANA_SERVER_IP}.nip.io"
 ```
 
 ## 4. Install Docker
@@ -146,6 +147,10 @@ instana version
 # Finally, let’s kick off the init process
 sudo instana init
 ```
+<picture>
+  <img alt="image" src="./assets/images/Instana-init.png">
+</picture>
+
 
 ## 5. First login
 

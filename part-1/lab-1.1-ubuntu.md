@@ -158,7 +158,7 @@ sudo instana init
 
 ## 6. First login
 
-## Launch from browser: https://52.118.165.235.nip.io
+## Launch from browser: https://<Instana Server IP>.nip.io
 
 ## 7. License
 

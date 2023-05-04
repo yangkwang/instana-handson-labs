@@ -157,9 +157,9 @@ sudo instana init
 </picture>
 
 ## 6. First login
-
-## Launch from browser: https://<Instana Server IP>.nip.io
-
+```sh
+# Launch from browser: https://<Instana Server IP>.nip.io
+```
 ## 7. License
 
 ```sh

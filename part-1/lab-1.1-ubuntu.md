@@ -151,16 +151,16 @@ sudo instana init
   <img alt="image" src="./assets/images/Instana-init.png">
 </picture>
 
-# After around 30 min
+## After around 30 min
 <picture>
   <img alt="image" src="./assets/images/init-complete.png">
 </picture>
 
-## 5. First login
+## 6. First login
 
-# Launch from browser: https://52.118.165.235.nip.io
+## Launch from browser: https://52.118.165.235.nip.io
 
-## 6. License
+## 7. License
 
 ```sh
 # Download license
@@ -173,7 +173,7 @@ $ sudo instana license import -f license
 $ sudo instana license verify
 ```
 
-## 7. Post Actions
+## 8. Post Actions
 
 After installing the agent by running the generated one-liner command from Instana UI:
 

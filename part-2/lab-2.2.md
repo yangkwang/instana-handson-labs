@@ -33,18 +33,23 @@ $ kubectl get pod -n robot-shop
 
 ```sh
 # Expose the app if you want – this is optional for the lab
-$ NODEPORT=$( kubectl get svc web -o=jsonpath='{.spec.ports[0].nodePort}' -n robot-shop ) && \
-  docker run -d --restart always \
-    --name kind-proxy-${NODEPORT} \
-    --publish 0.0.0.0:${NODEPORT}:${NODEPORT} \
-    --link kind-control-plane:target \
-    --network kind \
-    alpine/socat -dd \
-    tcp-listen:${NODEPORT},fork,reuseaddr tcp-connect:target:${NODEPORT} && \
-  echo "you now can access the app through: http://<HOST IP>:${NODEPORT}"
+# Open a terminal
+
+# Install socat
+sudo apt-get update
+sudo apt-get install socat
+
+# Get an IP address of the worker node
+kubectl get node -o wide
+
+# Get the nodeport for web service
+kubectl get svc -n robot-shop
+
+socat TCP4-LISTEN:80,fork TCP4: <node-ip>:<node-port>
+
 ```
 
-### On OpenShift
+### On OpenShift (Just for Information)
 
 ```sh
 # Create the project

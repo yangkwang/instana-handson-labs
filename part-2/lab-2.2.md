@@ -27,8 +27,54 @@ $ INSTANA_EUM_REPORTING_URL="https://168.1.53.231.nip.io:446/eum/" && \
 ```
 
 ```sh
-# Check out the pods deployed
+# Check out the pods deployed (wait 5-8 min)
 $ kubectl get pod -n robot-shop
+```
+
+```sh
+# To fix bug in Robot Shop
+# Firstly, log into the Web Pod:
+
+kubectl exec -n robot-shop -it "`kubectl get pod -l service=web -n robot-shop -o jsonpath={..metadata.name}`"  -- bash
+
+# Then print out the eum.url injected eum.html file:
+
+cat /usr/share/nginx/html/eum.html
+
+# Let’s copy the content and paste it into your editor of choice, 
+# and add the tailing “/” at the end of the 'reportingUrl', from:
+
+# From ineum('reportingUrl', 'https://168.1.53.216.nip.io:446/eum');
+# To ineum('reportingUrl', 'https://168.1.53.216.nip.io:446/eum/');
+
+# Then write it back to replace the original eum.html file. 
+# Please note that there is no “vi” in this Pod 
+# so we use “cat” command to write back the file:
+
+cat > /usr/share/nginx/html/eum.html
+
+# Then copy and paste the updated content to the prompt, 
+# and then press “Control + c” and the file will be updated.
+
+<!-- EUM include -->
+<script> 
+ (function(s,t,a,n){s[t]||(s[t]=a,n=s[a]=function(){n.q.push(arguments)}, 
+ n.q=[],n.v=2,n.l=1*new Date)})(window,"InstanaEumObject","ineum");
+
+ ineum('reportingUrl', 'https://<Instana Server IP>.nip.io:446/eum/'); 
+ ineum('key', 'RNORr81OQbes4sJX3C3BwQ'); 
+ ineum('trackSessions');
+ ineum('page', 'splash');
+</script>
+<script defer crossorigin="anonymous" src="https://168.1.53.216.nip.io:446/eum/eum.min.js"></script>
+<!-- EUM include end -->
+
+# You may have a final check by this command and make sure 
+# there is a ending slash in the 'reportingUrl'
+
+cat /usr/share/nginx/html/eum.html
+
+
 ```
 
 ```sh

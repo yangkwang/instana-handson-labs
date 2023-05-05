@@ -66,7 +66,7 @@ cat > /usr/share/nginx/html/eum.html
  ineum('trackSessions');
  ineum('page', 'splash');
 </script>
-<script defer crossorigin="anonymous" src="https://168.1.53.216.nip.io:446/eum/eum.min.js"></script>
+<script defer crossorigin="anonymous" src="https://<Instana Server IP>.nip.io:446/eum/eum.min.js"></script>
 <!-- EUM include end -->
 
 # You may have a final check by this command and make sure 

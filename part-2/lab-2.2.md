@@ -62,7 +62,7 @@ cat > /usr/share/nginx/html/eum.html
  n.q=[],n.v=2,n.l=1*new Date)})(window,"InstanaEumObject","ineum");
 
  ineum('reportingUrl', 'https://<Instana Server IP>.nip.io:446/eum/'); 
- ineum('key', 'RNORr81OQbes4sJX3C3BwQ'); 
+ ineum('key', '<key>'); 
  ineum('trackSessions');
  ineum('page', 'splash');
 </script>

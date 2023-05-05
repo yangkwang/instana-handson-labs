@@ -196,5 +196,8 @@ spec:
         image: brightzheng100/rs-website-load:2.1.0
         imagePullPolicy: Always
 EOF
+
+# scaling down the load 
+kubectl scale deployment rs-website-load -n robot-shop --replicas=0
 ```
 

@@ -37,6 +37,14 @@ sudo apt-get purge <package_name>
 ```
 
 ```
+# Log into the Centos VM
+$ footloose ssh root@centos-0 -c footloose.yaml
+yum install which
+
+root@ubuntu-0:~# curl -o setup_agent.sh https://setup.instana.io/agent && chmod 700 ./setup_agent.sh && sudo ./setup_agent.sh -a xxxxxxxxxxxxxxxxxx -d xxxxxxxxxxxxxxxxxx -t dynamic -e 168.1.53.231.nip.io:1444 -y
+```
+
+```
 # Configure zone
 root@ubuntu-0:~# touch /opt/instana/agent/etc/instana/configuration-zone.yaml
 root@ubuntu-0:~# INSTANA_ZONE="Student-1-Zone" && \

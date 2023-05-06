@@ -29,6 +29,12 @@ root@ubuntu-0:~# curl -o setup_agent.sh https://setup.instana.io/agent && chmod 
 root@ubuntu-0:~# systemctl status instana-agent
 ```
 
+```
+# If needed to uninstall the agent
+apt list --installed | grep instana-agent
+sudo apt-get purge <package_name>
+
+```
 
 ```
 # Configure zone

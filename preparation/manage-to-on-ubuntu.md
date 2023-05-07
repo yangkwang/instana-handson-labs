@@ -77,7 +77,7 @@ Re-login to the VM and try:
 docker run hello-world
 ```
 
-Move the docker /var/lib/docker/ to bigger disk partition:
+## Move the docker /var/lib/docker/ to bigger disk partition:
 ```sh
 sudo systemctl stop docker
 sudo mv /var/lib/docker/ /opt/docker

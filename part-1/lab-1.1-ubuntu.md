@@ -77,6 +77,10 @@ $ sudo apt-get remove docker docker-engine docker.io containerd runc
 
 # It is O.K if you see "Unable to locate package docker-engine"
 
+# If there is a need to purge the previous failed Docker install
+$ sudo apt-get purge docker-ce docker-ce-cli containerd.io
+
+
 # Update the apt package index and install packages to allow apt to use a repository over HTTPS:
 sudo apt-get update
 sudo apt-get install \

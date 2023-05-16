@@ -279,6 +279,10 @@ EOF
 
 sudo instana update -f settings.hcl
 
+# If there is a need to uninstall agent
+apt list --installed | grep instana-agent
+
+sudo apt-get purge <package_name>
 ```
 
 ```sh

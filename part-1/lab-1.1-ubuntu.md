@@ -355,5 +355,18 @@ src="https://<Instana Server IP>.nip.io:446/eum/eum.min.js"></script>
 
 ```
 
+```sh
+# if there is a need to reset password
+instana configure admin -p <new password>
+instana update -f settings.hcl
 
+```
+
+```sh
+# if there a need to increase java heap size of agent
+# on this folder /opt/instana/agent/bin there is a executable file called setenv
+# you can modify the value below to give a higher heap size
+# DEFAULT_AGENT_MAX_MEM='512m'
+# DEFAULT_HEAP_MAX_MEM='160m'
+```
 

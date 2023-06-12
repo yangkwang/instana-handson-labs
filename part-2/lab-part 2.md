@@ -927,7 +927,63 @@ signals are highlighted.
   <img alt="image3" src="./assets/images/summary.png">
 </picture>
 
+Dependencies
+Dependencies tab shows the discovered topology view for the services to illustrate how they interact with each other.
 
+<picture>
+  <img alt="image3" src="./assets/images/dependencies.png">
+</picture>
 
+We can enlarge the specific services icons by incoming calls, erroneous rate, or latency too:
 
+<picture>
+  <img alt="image3" src="./assets/images/enlargeService.png">
+</picture>
+
+Services
+Services tab focuses on the discovered services:
+
+<picture>
+  <img alt="image3" src="./assets/images/service.png">
+</picture>
+
+Error Messages
+Error Messages tab highlights the error messages, collected from tracing, for easier troubleshooting:
+
+<picture>
+  <img alt="image3" src="./assets/images/errMsg.png">
+</picture>
+
+Log Messages
+Log Messages tab highlights the log messages with WARN or higher criticality level, automatically instrumented and collected from tracing:
+
+<picture>
+  <img alt="image3" src="./assets/images/logMsg.png">
+</picture>
+
+Infrastructure
+Infrastructure tab lists down the corresponding infrastructure component shown on the Infrastructure Monitoring view.
+
+<picture>
+  <img alt="image3" src="./assets/images/infrastructure.png">
+</picture>
+
+Configuration
+Configuration tab shows the info how we configured the AP. We can further enhance or edit from here.
+
+<picture>
+  <img alt="image3" src="./assets/images/configApp.png">
+</picture>
+
+**Takeaways**
+As you could see from this lab, Instana’s Application Perspective (AP) is a powerful tool for monitoring, alerting, and analysis of a microservices environment. Each AP auto-generates a feature rich monitoring dashboard for the golden signals and more. It’s well organized so that a team can stay focused on the services they are interested in and aren’t distracted. Alerts, errors, and logs are scoped to an AP to focus the troubleshooting.
+An Application Perspective achieves this by enabling you to dynamically
+scope the visibility to “just the right” size to meet your needs, such as:
+- by specifying a sub-set of services along with their dependencies;
+- by zone or cluster;
+- by technology;
+- by business transaction or user journey;
+- by deployment engine;
+- by version or release;
+- or any combination.
 

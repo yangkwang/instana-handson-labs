@@ -383,30 +383,13 @@ EOF
 sudo instana update -f settings.hcl
 ```
 
-If there is a need to uninstall agent
-```sh
-apt list --installed | grep instana-agent
 
-sudo apt-get purge <package_name>
-```
-
-Set up the proper EUM endpoint which will proxy to the :2999 internal port
-DO REPLACE IT WITH YOUR ENDPOINT!!!
-Ref: https://www.ibm.com/docs/en/obi/current?topic=installer-configuring-end-user-monitoring
-```sh
-EUM_ENDPOINT="https://168.1.53.216.nip.io:446" && \
-cat | sudo tee -a settings.hcl <<EOF
-eum {
-  tracking_base_url = "${EUM_ENDPOINT}/eum/"
-}
-EOF
-```
 
 ## 8.3 Enhance the EUM settings
 
-```sh
-# By default, the code snippet generated from website monitoring might 
-# be using the internal port, which is HTTP-based port 2999. For example:
+
+By default, the code snippet generated from website monitoring might 
+be using the internal port, which is HTTP-based port 2999. For example:
 
 <script> 
   (function(s,t,a,n){s[t]||(s[t]=a,n=s[a]=function(){n.q.push(arguments)}, 
@@ -419,17 +402,17 @@ EOF
 <script defer crossorigin="anonymous" 
 src="http://<Instana Server IP>.nip.io:2999/eum.min.js"></script>
 
-# We should expose the ports proxied by embedded Nginx, so that they 
-# could be further exposed by the enterprise’s load-balancer to become the final EUM endpoint(s):
-#   - 446 for HTTPS, and
-#   - 86 for HTTP
-# So it’s like: enterprise load-balancer -> exposed 446/86 Instana ports -> 2999 internal port.
-# This can be achieved by:
+We should expose the ports proxied by embedded Nginx, so that they 
+could be further exposed by the enterprise’s load-balancer to become the final EUM endpoint(s):
+  - 446 for HTTPS, and
+  - 86 for HTTP
+So it’s like: enterprise load-balancer -> exposed 446/86 Instana ports -> 2999 internal port.
+This can be achieved by:
 
-# Set up the proper EUM endpoint which will proxy to the :2999 internal port 
-# DO REPLACE IT WITH YOUR ENDPOINT!!! 
-# Ref: https://www.ibm.com/docs/en/obi/current?topic=installer-configuring-end-user-monitoring 
-```
+Set up the proper EUM endpoint which will proxy to the :2999 internal port 
+DO REPLACE IT WITH YOUR ENDPOINT!!! 
+Ref: https://www.ibm.com/docs/en/obi/current?topic=installer-configuring-end-user-monitoring 
+
 
 ```sh
 EUM_ENDPOINT="https://<Instana Server IP>.nip.io:446" && \ 
@@ -440,13 +423,13 @@ eum {
 EOF
 ```
 
+
+Then apply it
 ```sh
-# Then apply it
 sudo instana update -f settings.hcl
 ```
 
-```sh
-# Once the update is complete, we can see the website configuration like this:
+Once the update is complete, we can see the website configuration like this:
 
 <script> 
   (function(s,t,a,n){s[t]||(s[t]=a,n=s[a]=function(){n.q.push(arguments)}, 
@@ -458,20 +441,24 @@ sudo instana update -f settings.hcl
 <script defer crossorigin="anonymous" 
 src="https://<Instana Server IP>.nip.io:446/eum/eum.min.js"></script>
 
-```
 
+if there is a need to reset password
 ```sh
-# if there is a need to reset password
 instana configure admin -p <new password>
 instana update -f settings.hcl
 
 ```
 
+If there is a need to uninstall agent
 ```sh
-# if there a need to increase java heap size of agent
-# on this folder /opt/instana/agent/bin there is a executable file called setenv
-# you can modify the value below to give a higher heap size
-# DEFAULT_AGENT_MAX_MEM='512m'
-# DEFAULT_HEAP_MAX_MEM='160m'
+apt list --installed | grep instana-agent
+
+sudo apt-get purge <package_name>
 ```
+if there a need to increase java heap size of agent
+on this folder /opt/instana/agent/bin there is a executable file called setenv
+you can modify the value below to give a higher heap size
+ DEFAULT_AGENT_MAX_MEM='512m'
+ DEFAULT_HEAP_MAX_MEM='160m'
+
 

@@ -122,59 +122,83 @@ NOTE : take note of the path to tls.crt (signed certificate file) and tls.key (p
 
 ## 4. Install Docker
 
+
+Remove some legacy components, if any
 ```sh
-# Remove some legacy components, if any
 $ sudo apt-get remove docker docker-engine docker.io containerd runc
+```
 
-# It is O.K if you see "Unable to locate package docker-engine"
+It is O.K if you see "Unable to locate package docker-engine"
 
-# If there is a need to purge the previous failed Docker install
+If there is a need to purge the previous failed Docker install
+```sh
 $ sudo apt-get purge docker-ce docker-ce-cli containerd.io
+```
 
-
-# Update the apt package index and install packages to allow apt to use a repository over HTTPS:
+Update the apt package index and install packages to allow apt to use a repository over HTTPS:
+```sh
 sudo apt-get update
 sudo apt-get install \
     ca-certificates \
     curl \
     gnupg
+```
 
-# Add Docker’s official GPG key:
+Add Docker’s official GPG key:
+```sh
 sudo mkdir -m 0755 -p /etc/apt/keyrings
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+```
 
-# Use the following command to set up the repository:
+Use the following command to set up the repository:
+```sh
 echo \
   "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
   "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
   sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+```
 
-# Update the apt package index:
+Update the apt package index:
+```sh
 sudo apt-get update
+```
 
-# To install a specific version of Docker Engine, start by listing the available versions in the repository:
+To install a specific version of Docker Engine, start by listing the available versions in the repository:
+```sh
 apt-cache madison docker-ce | awk '{ print $3 }'
+```
 
-# Select the desired version and install:
+Select the desired version and install:
+```sh
 VERSION_STRING=5:20.10.23~3-0~ubuntu-focal
 sudo apt-get install docker-ce=$VERSION_STRING docker-ce-cli=$VERSION_STRING containerd.io docker-buildx-plugin docker-compose-plugin
+```
 
-# Verify that the Docker Engine installation is successful by running the hello-world image:
+Verify that the Docker Engine installation is successful by running the hello-world image:
+```sh
 sudo docker run hello-world
+```
 
-# Moving /var/lib/docker to disk with more space
+Moving /var/lib/docker to disk with more space
+```sh
 sudo systemctl stop docker
 sudo mv /var/lib/docker /opt/docker
 sudo ln -s /opt/docker /var/lib/docker
+```
 
-# Start Docker daemon process
+Start Docker daemon process
+```sh
 sudo systemctl enable docker
 sudo systemctl start docker
+```
 
-# Have a try for Docker
+Have a try for Docker
+```sh
 sudo docker run hello-world
+```
 
-# Add current user into docker group so that we can run Docker cli without the need of sudo
+Add current user into docker group so that we can run Docker cli without the need of sudo
+```sh
 sudo usermod -aG docker $USER
 ```
 
@@ -182,31 +206,43 @@ sudo usermod -aG docker $USER
 
 ## 5. Install Instana Server
 
+
+As root, run the following commands:
 ```sh
-#As root, run the following commands:
 sudo -i
 echo "deb [arch=amd64] https://self-hosted.instana.io/apt generic main" > /etc/apt/sources.list.d/instana-product.list
 wget -qO - "https://self-hosted.instana.io/signing_key.gpg" | apt-key add -
 apt-get update
 apt-get install instana-console
+```
 
-# To avoid getting major updates during automated upgrades, run the following commands:
+To avoid getting major updates during automated upgrades, run the following commands:
+```sh
 cat >/etc/apt/preferences.d/instana-console <<EOF
 Package: instana-console
 Pin: version 247-0-1
 Pin-Priority: 1000
 EOF
+```
+It’s a good practice to avoid getting major updates during automated upgrades, so we can have full flexibility and control for the major upgrades.
+So let’s check the version we’re on now:
 
+```sh
 instana version
+```
 
-# Finally, let’s kick off the init process
+Finally, let’s kick off the Instana Server installation:
+```sh
 sudo instana init
 ```
+It will be an interactive user experience, let’s go through it with the proper values, like this:
+
 <picture>
   <img alt="image" src="./assets/images/Instana-init.png">
 </picture>
 
-## After around 30 min
+After around 30 min, depending on your download speed as it will download all Instana’s Docker images and install them automatically. Instana is also a microservices-architecture based platform with quite some components.
+
 <picture>
   <img alt="image" src="./assets/images/init-complete.png">
 </picture>
@@ -220,9 +256,10 @@ sudo instana init
   <img alt="image" src="./assets/images/firstlogin-1.png">
 </picture>
 
-```sh
-# Click “Go to instana!” button to start with the journey:
-```
+
+Click “Go to instana!” button to start with the journey:
+
+
 <picture>
   <img alt="image" src="./assets/images/firstlogin-2.png">
 </picture>

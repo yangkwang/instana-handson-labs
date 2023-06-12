@@ -11,8 +11,21 @@ Currently, there are quite some deployment patterns for Instana, which include:
 
 And this doc focuses on option #1, which is “1. All-in-one single-VM setup”, on Ubuntu.
 
+**VM Specs**
+The minimum VM specs are:
+  - 12 vCPU
+  - 48G RAM
+  - 100G might be a good starting point (88G left after installation)
 
+My VM on IBM Cloud: bx2-16x64 Balanced
 
+I’d highly recommend to have 16 vCPU, 64G RAM, and 100+
+
+Important Note - if the amount of CPUs or RAM is less than abovementioned specs, Instana CLI will stop you:
+
+<picture>
+  <img alt="image" src="./assets/images/resourceIssues.png">
+</picture>
 
 
 ## Access Manage-to VM

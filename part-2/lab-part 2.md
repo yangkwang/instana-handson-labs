@@ -71,6 +71,7 @@ We will focus on its core capabilities to dive deeper throughout the labs, one b
 Instana supports website monitoring by analyzing actual browser request times and route loading times. This allows detailed insights into the web browsing experience of end-users, as well as deep visibility into application call paths. The Instana website monitoring solution works by means of a lightweight JavaScript agent which is embedded into the monitored website.
 
 **Key Concepts**
+
 End-User Monitoring (EUM) or Real-User Monitoring (RUM)
 Website monitoring, often called End-User Monitoring (EUM) or Real-User Monitoring (RUM), is an important tool to understand digital user experience.
 
@@ -106,60 +107,72 @@ Well, a “website” is simply an application with customer-facing UI, which ty
 Let’s use the Robot Shop app here, which is a “typical” cloud-native application built with different technologies. It’s maintained by Instana team and the OSS community.
 
 
-### On Kubernetes
+### On Kubernetes (at the manage-to host)
 
+Create the namespace
 ```sh
-# Create the namespace
-$ kubectl create namespace robot-shop
-
-# Clone the repo
-$ git clone https://github.com/instana/robot-shop
-
-# Then cd into it
-$ cd robot-shop
-
-# Deploy it by Helm 3
-# NOTE: Use the right values generated in website config as the variables
-$ INSTANA_EUM_REPORTING_URL="https://168.1.53.231.nip.io:446/eum/" && \
-  INSTANA_EUM_KEY="xxxxxxxxxxxxxxxxx" && \
-  helm install robot-shop K8s/helm \
-    --namespace robot-shop \
-    --set image.version=2.1.0 \
-    --set nodeport=true \
-    --set eum.url="${INSTANA_EUM_REPORTING_URL}" \
-    --set eum.key="${INSTANA_EUM_KEY}"
+kubectl create namespace robot-shop
 ```
 
+Clone the repo
 ```sh
-# Check out the pods deployed (wait 5-8 min)
-$ kubectl get pod -n robot-shop
+git clone https://github.com/instana/robot-shop
 ```
 
+Then cd into it
 ```sh
-# To fix bug in Robot Shop
-# Firstly, log into the Web Pod:
+cd robot-shop
+```
 
+Deploy it by Helm 3
+NOTE: Use the right values generated in website config as the variables
+```sh
+INSTANA_EUM_REPORTING_URL="https://<Instana Server IP>.nip.io:446/eum/" && \
+INSTANA_EUM_KEY="xxxxxxxxxxxxxxxxx" && \
+helm install robot-shop K8s/helm \
+  --namespace robot-shop \
+  --set image.version=2.1.0 \
+  --set nodeport=true \
+  --set eum.url="${INSTANA_EUM_REPORTING_URL}" \
+  --set eum.key="${INSTANA_EUM_KEY}"
+```
+
+Check out the pods deployed (wait 5-8 min)
+```sh
+kubectl get pod -n robot-shop
+```
+
+
+To fix bug in Robot Shop
+Firstly, log into the Web Pod:
+
+```sh
 kubectl exec -n robot-shop -it "`kubectl get pod -l service=web -n robot-shop -o jsonpath={..metadata.name}`"  -- bash
+```
 
-# Then print out the eum.url injected eum.html file:
+Then print out the eum.url injected eum.html file:
 
+```sh
 cat /usr/share/nginx/html/eum.html
+```
 
-# Let’s copy the content and paste it into your editor of choice, 
-# and add the tailing “/” at the end of the 'reportingUrl', from:
+Let’s copy the content and paste it into your editor of choice, 
+and add the tailing “/” at the end of the 'reportingUrl', from:
 
-# From ineum('reportingUrl', 'https://168.1.53.216.nip.io:446/eum');
-# To ineum('reportingUrl', 'https://168.1.53.216.nip.io:446/eum/');
+From ineum('reportingUrl', 'https://168.1.53.216.nip.io:446/eum');
+To ineum('reportingUrl', 'https://168.1.53.216.nip.io:446/eum/');
 
-# Then write it back to replace the original eum.html file. 
-# Please note that there is no “vi” in this Pod 
-# so we use “cat” command to write back the file:
+Then write it back to replace the original eum.html file. 
+Please note that there is no “vi” in this Pod 
+so we use “cat” command to write back the file:
 
+```sh
 cat > /usr/share/nginx/html/eum.html
+```
 
-# Then copy and paste the updated content to the prompt, 
-# and then press “Control + c” and the file will be updated.
-
+Then copy and paste the updated content to the prompt, 
+and then press “Control + c” and the file will be updated.
+```sh
 <!-- EUM include -->
 <script> 
  (function(s,t,a,n){s[t]||(s[t]=a,n=s[a]=function(){n.q.push(arguments)}, 
@@ -172,70 +185,39 @@ cat > /usr/share/nginx/html/eum.html
 </script>
 <script defer crossorigin="anonymous" src="https://<Instana Server IP>.nip.io:446/eum/eum.min.js"></script>
 <!-- EUM include end -->
-
-# You may have a final check by this command and make sure 
-# there is a ending slash in the 'reportingUrl'
-
-cat /usr/share/nginx/html/eum.html
-
-
 ```
 
+You may have a final check by this command and make sure 
+there is a ending slash in the 'reportingUrl'
 ```sh
-# Expose the app if you want – this is optional for the lab
-# Open a terminal
+cat /usr/share/nginx/html/eum.html
+```
 
-# Install socat
+Expose the app if you want – this is optional for the lab
+Open a terminal
+
+Install socat
+```sh
 sudo apt-get update
 sudo apt-get install socat
-
-# Get an IP address of the worker node
+```
+Get an IP address of the worker node
+```sh
 kubectl get node -o wide
+```
+Use any one of the worker node IP for node-ip.
 
-# Get the nodeport for web service
+```sh
 kubectl get svc -n robot-shop
+```
 
+Get the nodeport for web service, node-port.
+Open another terminal to run the following command. The terminal needs to be kept there if you want to browse the app.
+```sh
 socat TCP4-LISTEN:80,fork TCP4: <node-ip>:<node-port>
 
 ```
 
-### On OpenShift (Just for Information)
-
-```sh
-# Create the project
-$ oc adm new-project robot-shop
-$ oc project robot-shop
-
-# Grant permissions
-$ oc adm policy add-scc-to-user anyuid -z default -n robot-shop
-$ oc adm policy add-scc-to-user privileged -z default -n robot-shop
-
-# Clone the repo
-$ git clone https://github.com/instana/robot-shop
-
-# Then cd into it
-$ cd robot-shop
-
-# Deploy it by Helm 3
-# NOTE: Use the right values generated in website config as the variables
-$ INSTANA_EUM_REPORTING_URL="https://168.1.53.231.nip.io:446/eum/" && \
-  INSTANA_EUM_KEY="xxxxxxxxxxxxxxxxx" && \
-  helm install robot-shop K8s/helm \
-    --namespace robot-shop \
-    --set image.version=2.1.0 \
-    --set eum.url="${INSTANA_EUM_REPORTING_URL}" \
-    --set eum.key="${INSTANA_EUM_KEY}"
-    --set openshift=true
-    --set ocCreateRoute=true
-```
-
-```sh
-# Check out the pods deployed
-$ kubectl get pod -n robot-shop
-
-# Check out the route
-$ kubectl get route -n robot-shop
-```
 
 ## 3. Install the “load-gen” app
 

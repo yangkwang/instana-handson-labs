@@ -28,15 +28,18 @@ Important Note - if the amount of CPUs or RAM is less than abovementioned specs,
   <img alt="image" src="./assets/images/resourceIssues.png">
 </picture>
 
+**Architecture**
 
-## Access Manage-to VM
+All components are containerized and deployed on Docker.
+
+# Installation Process
+
+## 1. Access Manage-to VM
 ```sh
-
-
 ssh itzuser@<manage-to ip address> -p 2223 -i <ssh key file>
 ```
 
-## Mount additional disk space
+## 2. Mount additional disk space
 ```sh
 lsblk
 ```
@@ -71,6 +74,48 @@ vi /etc/fstab
 <picture>
   <img alt="image4" src="./assets/images/fstab.png">
 </picture>
+
+## 3. Check Prerequisites
+
+Let’s perform such prerequisite checks within the Instana Server VM.
+ - Please make sure the server can connect to auth-infra.instana.io:443.
+ - All installation and migration commands must be executed as root user, or a “normal user” with sudo permission.
+ - Setup mount points and external volumes – note: all these mount points are configurable and should use a dedicated high performant SSD in production setup:
+  /mnt/data – Data Stores
+  /mnt/metrics – Metrics data
+  /mnt/traces – Tracing data
+  /var/log/instana – Logs
+
+Test the connectivity
+Make sure the netcat is installed
+
+```sh
+$ sudo apt-get install netcat
+$ nc -vz auth-infra.instana.io 443
+```
+
+Mount or simply create some data folders for simplicity purposes
+```sh
+$ sudo mkdir /opt/{data,metrics,traces}
+$ sudo mkdir /opt/log
+$ sudo mkdir /opt/log/instana
+
+TLS
+```sh
+$ sudo curl -sLO https://github.com/FiloSottile/mkcert/releases/download/v1.4.3/mkcert-v1.4.3-linux-amd64
+$ sudo chmod +x mkcert-v1.4.3-linux-amd64 && sudo mv mkcert-v1.4.3-linux-amd64 /usr/local/bin/mkcert
+```
+
+Create a TLS key pair with <INSTANA SERVER IP>.nip.io as its CN
+or skip this if you're going to use your key pair
+NOTE: PLEASE CHANGE TO YOUR IP
+```sh
+$ INSTANA_SERVER_IP=<Instana Server ip address> && \
+  sudo mkcert -cert-file tls.crt -key-file tls.key "${**_INSTANA_SERVER_IP_**}.nip.io" "${**_INSTANA_SERVER_IP_**}"
+```
+
+NOTE : take note of the path to tls.crt (signed certificate file) and tls.key (private key file) 
+        and the FQDN "${INSTANA_SERVER_IP}.nip.io"
 
 
 ## Install Docker

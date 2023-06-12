@@ -1,6 +1,6 @@
 # Preparing the “manage-to” Host, on Ubuntu
 
-#Overview
+# Overview
 
 ```sh
 Currently, there are quite some deployment patterns for Instana, which include:

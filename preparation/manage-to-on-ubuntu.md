@@ -112,55 +112,98 @@ or skip this if you're going to use your key pair
 NOTE: PLEASE CHANGE TO YOUR IP
 ```sh
 $ INSTANA_SERVER_IP=<Instana Server ip address> && \
-  sudo mkcert -cert-file tls.crt -key-file tls.key "${**_INSTANA_SERVER_IP_**}.nip.io" "${**_INSTANA_SERVER_IP_**}"
+  sudo mkcert -cert-file tls.crt -key-file tls.key "${INSTANA_SERVER_IP}.nip.io" "${INSTANA_SERVER_IP}"
 ```
 
 NOTE : take note of the path to tls.crt (signed certificate file) and tls.key (private key file) 
         and the FQDN "${INSTANA_SERVER_IP}.nip.io"
 
 
-## Install Docker
+## 4. Install Docker
 
+Remove some legacy components, if any
 ```sh
-# Install 
+$ sudo apt-get remove docker docker-engine docker.io containerd runc
+```
+
+It is O.K if you see "Unable to locate package docker-engine"
+
+If there is a need to purge the previous failed Docker install
+```sh
+$ sudo apt-get purge docker-ce docker-ce-cli containerd.io
+```
+
+Update the apt package index and install packages to allow apt to use a repository over HTTPS:
+```sh
 sudo apt-get update
-sudo apt-get remove docker docker-engine docker.io containerd runc
-sudo apt-get install -y \
-    apt-transport-https \
+sudo apt-get install \
     ca-certificates \
     curl \
-    gnupg-agent \
-    software-properties-common
-    
-# Add Docker’s official GPG key:
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+    gnupg
+```
 
-# Set up the stable repository
-sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-   
-# Install Docker engine
+Add Docker’s official GPG key:
+```sh
+sudo mkdir -m 0755 -p /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+```
+
+Use the following command to set up the repository:
+```sh
+echo \
+  "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+```
+
+Update the apt package index:
+```sh
 sudo apt-get update
-sudo apt-get install -y docker-ce docker-ce-cli containerd.io
+```
 
-# Post-installation steps for Linux
+To install a specific version of Docker Engine, start by listing the available versions in the repository:
+```sh
+apt-cache madison docker-ce | awk '{ print $3 }'
+```
+
+Select the desired version and install:
+```sh
+VERSION_STRING=5:20.10.23~3-0~ubuntu-focal
+sudo apt-get install docker-ce=$VERSION_STRING docker-ce-cli=$VERSION_STRING containerd.io docker-buildx-plugin docker-compose-plugin
+```
+
+Verify that the Docker Engine installation is successful by running the hello-world image:
+```sh
+sudo docker run hello-world
+```
+
+Moving /var/lib/docker to disk with more space
+```sh
+sudo systemctl stop docker
+sudo mv /var/lib/docker /opt/docker
+sudo ln -s /opt/docker /var/lib/docker
+```
+
+Start Docker daemon process
+```sh
+sudo systemctl enable docker
+sudo systemctl start docker
+```
+
+Have a try for Docker
+```sh
+sudo docker run hello-world
+```
+
+Add current user into docker group so that we can run Docker cli without the need of sudo
+```sh
 sudo usermod -aG docker $USER
 ```
 
-Re-login to the VM and try:
+> Note: Please re-login to the VM to take effect.
 
 ```sh
 # Try running docker without sudo
-docker run hello-world
-```
-
-## Move the docker /var/lib/docker/ to bigger disk partition:
-```sh
-sudo systemctl stop docker
-sudo mv /var/lib/docker/ /opt/docker
-sudo ln -s /opt/docker /var/lib/docker
-
-sudo systemctl start docker
-
 docker run hello-world
 ```
 

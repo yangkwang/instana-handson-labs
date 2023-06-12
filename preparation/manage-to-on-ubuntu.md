@@ -202,8 +202,8 @@ sudo usermod -aG docker $USER
 
 > Note: Please re-login to the VM to take effect.
 
+Try running docker without sudo
 ```sh
-# Try running docker without sudo
 docker run hello-world
 ```
 

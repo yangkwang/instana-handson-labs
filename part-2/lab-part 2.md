@@ -259,9 +259,11 @@ Now, you can access robotshop via http://<Manage To IP >
 
 ## 3. Install the “load-gen” app
 
+The Robot Shop repository comes with a handy load generation tool to keep accessing the website. We can install that to generate some traffic.
+
+Deploy the load-gen App
 ```sh
-# Deploy the load-gen App
-$ kubectl -n robot-shop apply -f - <<EOF
+kubectl -n robot-shop apply -f - <<EOF
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -292,10 +294,13 @@ spec:
         image: robotshop/rs-load:latest
 EOF
 ```
+Bright Zheng created a new Selenium-based “load-gen”, here, which might generate better traffic for website monitoring as it can better simulate the human behaviours for website exploring with the EUM agent executed automatically.
 
+For this lab, please deploy the Selenium-based “load-gen” as well, we can do this:
+
+Deploy the Selenium-based EUM friendly load-gen
 ```sh
-# Deploy the Selenium-based EUM friendly load-gen
-$ kubectl -n robot-shop apply -f - <<EOF
+kubectl -n robot-shop apply -f - <<EOF
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -320,14 +325,105 @@ spec:
         image: brightzheng100/rs-website-load:2.1.0
         imagePullPolicy: Always
 EOF
+```
 
-# scaling down the load 
+To stop the Selenium-based load, it can be scale down by:
+```sh 
 kubectl scale deployment rs-website-load -n robot-shop --replicas=0
 ```
 
+## 4. Explore the website monitoring in Instana
+
+Summary tab
+
+<picture>
+  <img alt="image3" src="./assets/images/summaryTab.png">
+</picture>
+
+Speed tab
+
+<picture>
+  <img alt="image3" src="./assets/images/speedTab.png">
+</picture>
+
+Resources Tab
+<picture>
+  <img alt="image3" src="./assets/images/resourceTab.png">
+</picture>
+
+HTTP Requests tab
+<picture>
+  <img alt="image3" src="./assets/images/httpRequestTab.png">
+</picture>
+
+JS Errors tab
+<picture>
+  <img alt="image3" src="./assets/images/jsErrorTab.png">
+</picture>
+
+Geography tab
+<picture>
+  <img alt="image3" src="./assets/images/geoTab.png">
+</picture>
+
+Custom Events Tab
+<picture>
+  <img alt="image3" src="./assets/images/customEventTab.png">
+</picture>
+
+Pages tab
+<picture>
+  <img alt="image3" src="./assets/images/pagesTab.png">
+</picture>
+
+Alerts tab
+<picture>
+  <img alt="image3" src="./assets/images/alertsTab.png">
+</picture>
+
+Configuration tab
+<picture>
+  <img alt="image3" src="./assets/images/configTab.png">
+</picture>
+
+**Takeaways**
+
+As you could see from this lab, Instana can help us generate a handy code snippet with the fine-grained EUM JavaScript Agent embedded, which can be easily plugged into our app to make it instrumented.
+The built-in website monitoring dashboard can be used to capture and visualize the metrics as the golden signals for our app SRE/operator to understand the website’s performance with a true End-User Monitoring (EUM) or Real-User Monitoring (RUM) experience.
 
 
 # Lab 2.3 – Install & Manage Agents
+Agent is the piece of software deployed into the monitored environment so that it can discover and collect the right monitoring data and send it back to Instana backend for further correlation and analytics for insights and actions.
+
+**Key Concepts**
+
+Instana has a powerful “one-agent” concept, which means that one agent discovers all supported technologies intelligently, activates the right sensor(s) to collect the right data, and sends it over to the backend. However, this
+doesn’t mean one-size-fits-all. Instead, Instana offers some “higher” level of
+agent types.
+
+**Agent Types**
+
+- Host Agents are agents installed into a Virtual Machine (VM), a physical host, Kubernetes, Cloud Foundry, VMware Tanzu and similar platforms.
+- Cloud Service Agents are agents installed to monitor Cloud providers, like Amazon Relational Database Service (RDS) or Azure subscriptions.
+- Serverless Agents are agents extend corresponding Cloud Service Agents for monitoring serverless – also known as Function-as-a-Service (FaaS) or Container-as-a-Service (CaaS) – platforms. As of now, AWS Fargate, AWS Lambda, Google Cloud Run are supported.
+- Web and Mobile Agents are agents used for monitoring web sites and mobile applications.
+
+**Goal**
+
+1. To understand the agent types Instana provides for different monitor targets
+2. To learn how to install agents on Kubernetes/OpenShift and Linux VM
+3. To dive deeper into Instana’s Agent architecture, sensors and management
+
+**Steps**
+
+In general, Instana provides convenient mechanisms to generate installation scripts for all types of agents.
+
+Click “Agents” -> “Installing Instana Agents” to start with:
+
+<picture>
+  <img alt="image3" src="./assets/images/installAgent.png">
+</picture>
+
 
 ## 6. Linux VM agent – Install agent
 

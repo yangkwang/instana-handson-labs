@@ -247,8 +247,10 @@ Open another terminal to run the following command. The terminal needs to be kep
 socat TCP4-LISTEN:80,fork TCP4: <node-ip>:<node-port>
 
 ```
-Now, you can access robotshop via http://<Manage To IP >
 
+```sh
+Now, you can access robotshop via http://<Manage To IP >
+```
 
 <picture>
   <img alt="image3" src="./assets/images/robotShop.png">

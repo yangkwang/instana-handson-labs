@@ -920,6 +920,7 @@ The “Analyze Calls” button provides a convenient entry to analyze, for calls
 </picture>
 
 Summary
+
 Summary tab is the default view of application where a series of “golden”
 signals are highlighted.
 
@@ -976,6 +977,7 @@ Configuration tab shows the info how we configured the AP. We can further enhanc
 </picture>
 
 **Takeaways**
+
 As you could see from this lab, Instana’s Application Perspective (AP) is a powerful tool for monitoring, alerting, and analysis of a microservices environment. Each AP auto-generates a feature rich monitoring dashboard for the golden signals and more. It’s well organized so that a team can stay focused on the services they are interested in and aren’t distracted. Alerts, errors, and logs are scoped to an AP to focus the troubleshooting.
 An Application Perspective achieves this by enabling you to dynamically
 scope the visibility to “just the right” size to meet your needs, such as:
@@ -986,4 +988,23 @@ scope the visibility to “just the right” size to meet your needs, such as:
 - by deployment engine;
 - by version or release;
 - or any combination.
+
+
+# Lab2.5 – Infrastructure Monitoring
+
+**Key Concepts**
+**Infrastructure**
+
+Infrastructure - physical, virtual, cloud, hybrid, containerized - is the underlying layer to provide the relevant resources and services for applications.
+
+**Goal**
+
+Sometimes, especially in cloud-native world, the line between infrastructure and apps can be blur and the responsibility can be slightly shifted.
+For example, is a container that runs our app the infrastructure? How about the middleware running in that container? Remember, the containers are typically packaged by developers or CI/CD pipelines.
+
+The goal of this lab is:
+- To understand the value of providing the infrastructure view
+- To understand how Instana brings in a holistic view for different layers of technologies being monitored
+
+**Steps**
 

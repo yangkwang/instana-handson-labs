@@ -1,4 +1,21 @@
 # Preparing the “manage-to” Host, on Ubuntu
+
+#Overview
+
+```sh
+Currently, there are quite some deployment patterns for Instana, which include:
+1. All-in-one single-VM setup
+2. Dual-VM setup
+3. Kubernetes for Instana components + single-VM for databases setup
+4. Kubernetes for Instana components + multi-VM for databases setup
+5. All-in Kubernetes
+And this doc focuses on option #1, which is “1. All-in-one single-VM setup”, on Ubuntu.
+
+```
+
+
+
+
 ## Access Manage-to VM
 ```sh
 

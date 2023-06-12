@@ -391,6 +391,7 @@ sudo instana update -f settings.hcl
 By default, the code snippet generated from website monitoring might 
 be using the internal port, which is HTTP-based port 2999. For example:
 
+```sh
 <script> 
   (function(s,t,a,n){s[t]||(s[t]=a,n=s[a]=function(){n.q.push(arguments)}, 
   n.q=[],n.v=2,n.l=1*new Date)})(window,"InstanaEumObject","ineum"); 
@@ -401,6 +402,7 @@ be using the internal port, which is HTTP-based port 2999. For example:
 </script> 
 <script defer crossorigin="anonymous" 
 src="http://<Instana Server IP>.nip.io:2999/eum.min.js"></script>
+```
 
 We should expose the ports proxied by embedded Nginx, so that they 
 could be further exposed by the enterprise’s load-balancer to become the final EUM endpoint(s):
@@ -431,6 +433,7 @@ sudo instana update -f settings.hcl
 
 Once the update is complete, we can see the website configuration like this:
 
+```sh
 <script> 
   (function(s,t,a,n){s[t]||(s[t]=a,n=s[a]=function(){n.q.push(arguments)}, 
   n.q=[],n.v=2,n.l=1*new Date)})(window,"InstanaEumObject","ineum"); 
@@ -440,7 +443,7 @@ Once the update is complete, we can see the website configuration like this:
 </script> 
 <script defer crossorigin="anonymous" 
 src="https://<Instana Server IP>.nip.io:446/eum/eum.min.js"></script>
-
+```
 
 if there is a need to reset password
 ```sh
@@ -458,7 +461,8 @@ sudo apt-get purge <package_name>
 if there a need to increase java heap size of agent
 on this folder /opt/instana/agent/bin there is a executable file called setenv
 you can modify the value below to give a higher heap size
+```sh
  DEFAULT_AGENT_MAX_MEM='512m'
  DEFAULT_HEAP_MAX_MEM='160m'
-
+```
 

@@ -34,15 +34,77 @@ default dashboard with below information:
 
 Please note though, the landing page of the “default” dashboard can be set to your custom dashboard too if you want, so you can have a landing page from that.
 
-
 <picture>
   <img alt="image3" src="./assets/images/defaultDashboard.png">
 </picture>
 
 
+2. Menu items
+
+<picture>
+  <img alt="image3" src="./assets/images/menus.png">
+</picture>
+
+3. Commonly shared components
+
+Instana provides a consistent UX and there are some reusable components on different UIs.
+
+<picture>
+  <img alt="image3" src="./assets/images/consistentUX.png">
+</picture>
+
+Let’s go through some of them one by one:
+
+<picture>
+  <img alt="image3" src="./assets/images/UX2.png">
+</picture>
+
+**Takeaways**
+
+As you could see from this lab, Instana provides a fine-grained, simplified and consistent user experience while offering highly integrated modern Application Performance Management (APM) features.
+
+We will focus on its core capabilities to dive deeper throughout the labs, one by one.
+
+
 # Lab 2.2 – Website Monitoring
 
+Instana supports website monitoring by analyzing actual browser request times and route loading times. This allows detailed insights into the web browsing experience of end-users, as well as deep visibility into application call paths. The Instana website monitoring solution works by means of a lightweight JavaScript agent which is embedded into the monitored website.
+
+**Key Concepts**
+End-User Monitoring (EUM) or Real-User Monitoring (RUM)
+Website monitoring, often called End-User Monitoring (EUM) or Real-User Monitoring (RUM), is an important tool to understand digital user experience.
+
+Goal
+- To understand how to enable monitoring for (microservices-based) website
+- To walk through the built-in dashboards and metrics
+- To understand the value of website monitoring
+
+Steps
+
+1. Start by defining a website on Instana
+
+<picture>
+  <img alt="image3" src="./assets/images/defineWebsite.png">
+</picture>
+
+Key in the website name, like “Student-{n} Robot Shop Website” is fine, where the {n} is the trainee’s identifier.
+Now Instana will automatically generate some code snippet for us which can be easily embedded into our application.
+
+
+<picture>
+  <img alt="image3" src="./assets/images/codeSnippet.png">
+</picture>
+
+Note:
+  1. We can always check out this info within the website’s configuration anytime later.
+  2. The are some important elements we will use, like the reporting URL and key.
+
+
 ## 2. Install Robot-Shop website
+
+Well, a “website” is simply an application with customer-facing UI, which typically may include multiple services at the backend, with databases for data persistence.
+Let’s use the Robot Shop app here, which is a “typical” cloud-native application built with different technologies. It’s maintained by Instana team and the OSS community.
+
 
 ### On Kubernetes
 

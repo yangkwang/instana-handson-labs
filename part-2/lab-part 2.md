@@ -347,41 +347,49 @@ Speed tab
 </picture>
 
 Resources Tab
+
 <picture>
   <img alt="image3" src="./assets/images/resourceTab.png">
 </picture>
 
 HTTP Requests tab
+
 <picture>
   <img alt="image3" src="./assets/images/httpRequestTab.png">
 </picture>
 
 JS Errors tab
+
 <picture>
   <img alt="image3" src="./assets/images/jsErrorTab.png">
 </picture>
 
 Geography tab
+
 <picture>
   <img alt="image3" src="./assets/images/geoTab.png">
 </picture>
 
 Custom Events Tab
+
 <picture>
   <img alt="image3" src="./assets/images/customEventTab.png">
 </picture>
 
 Pages tab
+
 <picture>
   <img alt="image3" src="./assets/images/pagesTab.png">
 </picture>
 
 Alerts tab
+
 <picture>
   <img alt="image3" src="./assets/images/alertsTab.png">
 </picture>
 
 Configuration tab
+
 <picture>
   <img alt="image3" src="./assets/images/configTab.png">
 </picture>
@@ -423,6 +431,72 @@ Click “Agents” -> “Installing Instana Agents” to start with:
 <picture>
   <img alt="image3" src="./assets/images/installAgent.png">
 </picture>
+
+<picture>
+  <img alt="image3" src="./assets/images/installAgent2.png">
+</picture>
+
+
+## 1. Kubernetes agent – Generate installation scripts
+
+Click “Kubernetes”, pick “Helm chart”, which is the default option, and key in:
+
+- Cluster name: it’s a cluster name of the Kubernetes, e.g. “Student-{n}- Cluster” is fine, where {n} is the trainee’s identifier
+
+- Agent zone: it’s a logical “zone” concept to group your resources in “Infrastructure” view, e.g. “Student-{n}-Zone” is fine, where {n} is the trainee’s identifier – please pick a meaningful name for the zone.
+
+<picture>
+  <img alt="image3" src="./assets/images/k8sAgent.png">
+</picture>
+
+And then click the “Copy” button to copy the generated script to clipboard.
+
+## 2. Kubernetes agent – Install agent
+
+We now can paste the copied script on the console of our Host VM and run it. The script should look like this – do remember to use your generated script!
+
+Make sure we’ve logged into Kubernetes with admin role 
+Then past YOUR copied script to install the agent
+
+```sh
+helm install instana-agent \
+  --repo https://agents.instana.io/helm \ 
+  --namespace instana-agent \ 
+  --create-namespace \ 
+  --set agent.key=xxxxxxxxxxxxxxxxxx \ 
+  --set agent.downloadKey=xxxxxxxxxxxxxxxxxx \ 
+  --set agent.endpointHost=<Instana Server IP>.nip.io \ 
+  --set agent.endpointPort=1444 \ 
+  --set cluster.name='Student-1-Cluster' \ 
+  --set zone.name='Student-1-Zone' \ 
+  instana-agent
+```
+Note:
+  - By default, the Helm command will create a namespace named “instana-agent”.
+  - If you’re installing the agent for OpenShift, not Kubernetes, there is another dedicated entry, but the Helm command is quite similar.
+
+If proxy is required to access the backend and the repository of agent sensors, configure below environment variables and set them with “--set key=value” format:
+
+```sh
+agent.proxyHost      Hostname/address of a proxy
+agent.proxyPort      Port of a proxy
+agent.proxyProtocol  Proxy protocol. Supported proxy types are http (for both HTTP and HTTPS proxies), socks4, socks5.
+agent.proxyUser      Username of the proxy auth
+agent.proxyPassword  Password of the proxy auth
+agent.proxyUseDNS    Boolean if proxy also does DNS
+```
+
+After a few (1-2) minutes, we should be able to see the pods running, which are derived from a DaemonSet:
+
+Soon, we can see the pods of the DaemonSet are deployed
+
+```sh
+kubectl get pod -n instana-agent
+```
+<picture>
+  <img alt="image3" src="./assets/images/k8sPod.png">
+</picture>
+
 
 
 ## 6. Linux VM agent – Install agent

@@ -698,7 +698,7 @@ show only something match the keyword, which is a zone:
   <img alt="image3" src="./assets/images/infraQuery.png">
 </picture>
 
-And we can use “advanced” filters too, like “entity.zone:"Student*" and “entity.type:httpd” so that we can precisely locate/query desired objects within our IT landscape:
+And we can use “advanced” filters too, like “entity.zone:"Student*" *and “entity.type:httpd” so that we can precisely locate/query desired objects within our IT landscape:
 
 <picture>
   <img alt="image3" src="./assets/images/infraAdvanceFilter.png">
@@ -781,5 +781,153 @@ Bright Zheng has co-authored an article, with a Red Hatter in APAC region, to co
 And the powerful architecture of one-agent, with the huge ecosystem of the sensors for hundreds of supported technologies brings in intelligent discovery for any potential technologies we adopt along the way, without a need to re- configure from time to time, which dramatically reduces the operational effort. You may check out this doc for currently supported technologies: https://www.instana.com/docs/ecosystem/
 
 The out-of-the-box integration of Git repo enables us to embrace GitOps for a better day 2 configuration management experience.
+
+# Lab 2.4 – Application Monitoring
+
+**Key Concepts**
+
+**Application**
+An application for APM tools is a static set of code runtimes (e.g. JVM or CLR) that are monitored using an agent. Normally the application is defined as a configuration parameter on each agent.
+Instana introduces the next generation of APM with its application hierarchy of services, endpoints, and application perspectives across them. The main goal is to simplify the monitoring of your business' service quality. Based on the data Instana collects from traces and component sensors, we discover your application landscape directly from the services actually being implemented.
+
+**Application Perspectives**
+Application perspectives enable you to tailor your view of an application and to capture the type of semantics and information you need to optimize the applications and services you are responsible for. An application perspective represents a set of services and endpoints that are defined by a shared context and is declared using tags.
+
+**Goal**
+1. To understand how to define an application in Instana
+2. To walk through the built-in dashboards and metrics
+
+**Steps**
+1. Create Application Perspectives (AP) through the wizard
+
+Click the Instana icon at the top left to start – or simply click the
+“Application” menu item to jump into applications directly:
+
+Follow by Click “New Application Perspective” under “Applications” section:
+
+<picture>
+  <img alt="image3" src="./assets/images/createAppPerspective.png">
+</picture>
+
+Step 1: Select Model, or Blueprint
+
+There is a list of models/blueprints:
+- Services or Endpoints: The simplest way to construct an AP is by selecting the collection of services or endpoints directly.
+- A Critical User Journey: Similar to the blueprint above but with defaults for use with the SLI / SLO capability. This blueprint will be enhanced in the future for deeper SLI / SLO integration.
+- Environment or Region: Selecting the services based on an environment (e.g., production or staging that may be described by the agent.zone tag) or region (eg. US East).
+- An Important Customer or Tenant: By leveraging custom tags or HTTP parameter information, an AP can be constructed for your important customer or tenant.
+- Kubernetes or Container: A platform oriented way to specify the collection of services that form an AP.
+- Request Attributes: An AP based on request attributes (eg. HTTP headers, query parameters).
+- Technology: A group of services based on a technology (eg. MySQL, all databases) or application name.
+- Custom Tags: You can add your own meta-data as a custom tag via the SDK and the custom tag data specifies the collection of services or endpoints.
+
+<picture>
+  <img alt="image3" src="./assets/images/modelList.png">
+</picture>
+
+Let’s try “Kubernetes or Container” since we’ve installed the agent for our
+Kubernetes / OpenShift cluster, and click “Next”:
+
+<picture>
+  <img alt="image3" src="./assets/images/k8sModel.png">
+</picture>
+
+Step 2: Specify Application
+
+Click the “Add filter”, we can add two filters:
+- Agent Zone = “<YOUR INSTANA ZONE>” – replace it with your Zone name
+- Kubernetes Namespace = “robot-shop”
+
+<picture>
+  <img alt="image3" src="./assets/images/specifyApp.png">
+</picture>
+
+Step 3: Provide Details
+Let’s name it something like “Student-{n} Robot Shop App” and click “Create” button.
+
+<picture>
+  <img alt="image3" src="./assets/images/nameApp.png">
+</picture>
+
+It will be automatically redirected to the Application view of our newly
+created application “Robot Shop”:
+
+<picture>
+  <img alt="image3" src="./assets/images/robotShopApp.png">
+</picture>
+
+Click the “Live” button to allow displaying dashboard live, and we can see metrics filling up the dashboard automatically within 1 minutes.
+
+<picture>
+  <img alt="image3" src="./assets/images/liveUpdate.png">
+</picture>
+
+2. Explore the application dashboard
+
+General
+
+At the op, there is a Time Range selection, by default it’s “Last Hour”
+moving window.
+
+<picture>
+  <img alt="image3" src="./assets/images/robotLastHr.png">
+</picture>
+
+We can easily switch to “Live” mode which means we’re using the live
+metrics rendering the dashboard:
+
+Once clicked, it will become green with a refreshing animation:
+<picture>
+  <img alt="image3" src="./assets/images/clieckLive.png">
+</picture>
+
+Time Shift is to overlay last time window to have a better view of answering
+“what happened before” and “what’s the baseline to compare”:
+
+<picture>
+  <img alt="image3" src="./assets/images/timeShift.png">
+</picture>
+
+Once enabled by clicking say “Previous window”, we can see the difference
+from some interesting areas:
+
+<picture>
+  <img alt="image3" src="./assets/images/timeShiftResult.png">
+</picture>
+
+Stack offers an Application-centric contextual view for the related services, endpoints.
+
+<picture>
+  <img alt="image3" src="./assets/images/appStack.png">
+</picture>
+
+If the Application is related to OpenShift / Kubernetes, the “Kubernetes” tab offers more info about the cluster, nodes, namespaces, deployments, pods etc., so we can easily navigate through the relevant objects.
+
+<picture>
+  <img alt="image3" src="./assets/images/k8sStack.png">
+</picture>
+
+Infrastructure providers Zone, host, processes, runtimes etc., infra level information that is related to current application.
+
+<picture>
+  <img alt="image3" src="./assets/images/infraStack.png">
+</picture>
+
+The “Analyze Calls” button provides a convenient entry to analyze, for calls.
+
+<picture>
+  <img alt="image3" src="./assets/images/analyseCall.png">
+</picture>
+
+Summary
+Summary tab is the default view of application where a series of “golden”
+signals are highlighted.
+
+<picture>
+  <img alt="image3" src="./assets/images/summary.png">
+</picture>
+
+
+
 
 

@@ -1,5 +1,38 @@
 # Lab 1.1 – Install Instana Server Manually
-## Access Instana-Server VM
+
+# Overview
+
+Currently, there are quite some deployment patterns for Instana, which include:
+   1. All-in-one single-VM setup
+   2. Dual-VM setup
+   3. Kubernetes for Instana components + single-VM for databases setup
+   4. Kubernetes for Instana components + multi-VM for databases setup
+   5. All-in Kubernetes
+
+And this doc focuses on option #1, which is “1. All-in-one single-VM setup”, on Ubuntu.
+
+**VM Specs**
+
+The minimum VM specs are:
+  - 12 vCPU
+  - 48G RAM
+  - 100G might be a good starting point (88G left after installation)
+
+My VM on IBM Cloud: bx2-16x64 Balanced
+
+I’d highly recommend to have 16 vCPU, 64G RAM, and 100+
+
+Important Note - if the amount of CPUs or RAM is less than abovementioned specs, Instana CLI will stop you:
+
+<picture>
+  <img alt="image" src="./assets/images/resourceIssues.png">
+</picture>
+
+**Architecture**
+
+All components are containerized and deployed on Docker.
+
+## 1. Access Instana-Server VM
 ```sh
 ssh itzuser@<Instana Server ip address> -p 2223 -i <ssh key file>
 ```
@@ -44,30 +77,48 @@ vi /etc/fstab
 
 ## 3. Check Prerequisites
 
+Let’s perform such prerequisite checks within the Instana Server VM.
+ - Please make sure the server can connect to auth-infra.instana.io:443.
+ - All installation and migration commands must be executed as root user, or a “normal user” with sudo permission.
+ - Setup mount points and external volumes – note: all these mount points are configurable and should use a dedicated high performant SSD in production setup:
+  /mnt/data – Data Stores
+  /mnt/metrics – Metrics data
+  /mnt/traces – Tracing data
+  /var/log/instana – Logs
+
+Test the connectivity
+Make sure the netcat is installed
+
 ```sh
-# Test the connectivity
-# Make sure the netcat is installed
 $ sudo apt-get install netcat
 $ nc -vz auth-infra.instana.io 443
+```
 
-# Mount or simply create some data folders for simplicity purposes
+Mount or simply create some data folders for simplicity purposes
+```sh
 $ sudo mkdir /opt/{data,metrics,traces}
 $ sudo mkdir /opt/log
 $ sudo mkdir /opt/log/instana
+```
 
-# TLS
+TLS
+```sh
 $ sudo curl -sLO https://github.com/FiloSottile/mkcert/releases/download/v1.4.3/mkcert-v1.4.3-linux-amd64
 $ sudo chmod +x mkcert-v1.4.3-linux-amd64 && sudo mv mkcert-v1.4.3-linux-amd64 /usr/local/bin/mkcert
+```
 
-# Create a TLS key pair with <INSTANA SERVER IP>.nip.io as its CN
-# or skip this if you're going to use your key pair
-# NOTE: PLEASE CHANGE TO YOUR IP
+Create a TLS key pair with <INSTANA SERVER IP>.nip.io as its CN
+or skip this if you're going to use your key pair
+
+> NOTE: PLEASE CHANGE TO YOUR IP
+
+```sh
 $ INSTANA_SERVER_IP=<Instana Server ip address> && \
   sudo mkcert -cert-file tls.crt -key-file tls.key "${INSTANA_SERVER_IP}.nip.io" "${INSTANA_SERVER_IP}"
-
-# NOTE : take note of the path to tls.crt (signed certificate file) and tls.key (private key file) 
-#        and the FQDN "${INSTANA_SERVER_IP}.nip.io"
 ```
+
+NOTE : take note of the path to tls.crt (signed certificate file) and tls.key (private key file) 
+        and the FQDN "${INSTANA_SERVER_IP}.nip.io"
 
 ## 4. Install Docker
 

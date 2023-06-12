@@ -335,7 +335,9 @@ $ docker network create footloose-cluster
 Spin up VMs
 ```sh
 $ footloose create -c footloose.yaml
-
+```
+```sh
+Output:
 
 INFO[0000] Docker Image: quay.io/footloose/ubuntu18.04 present locally
 INFO[0000] Docker Image: quay.io/footloose/centos7 present locally
@@ -348,6 +350,10 @@ INFO[0001] Connecting labs-centos-0 to the footloose-cluster network...
 Check it out
 ```sh
 $ footloose show -c footloose.yaml
+```
+
+```sh
+Output:
 
 NAME            HOSTNAME   PORTS           IP   IMAGE                           CMD          STATE     BACKEND
 labs-ubuntu-0   ubuntu-0   0->{22 49154}        quay.io/footloose/ubuntu18.04   /sbin/init   Running

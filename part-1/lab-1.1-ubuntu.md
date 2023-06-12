@@ -294,15 +294,14 @@ Valid till: 2025-09-22 23:59:59.999 +0000 UTC
 
 ## 8.1 Install Agent for Instana
 
-```sh
-# “Who monitors the monitors?”
-# Well, we now have the answer in Instana: Instana monitors itself by its agent!
-# 
-# We recommend monitoring the health of your self-hosted Instana server with the use of an 
-# Instana agent running in Infrastructure-only mode. This will allow a number of health 
-# checks and metrics to be collected for your Instana server.
-# 
-```
+Who monitors the monitors?”
+Well, we now have the answer in Instana: Instana monitors itself by its agent!
+
+We recommend monitoring the health of your self-hosted Instana server with the use of an 
+Instana agent running in Infrastructure-only mode. This will allow a number of health 
+checks and metrics to be collected for your Instana server.
+
+
 <picture>
   <img alt="image" src="./assets/images/agent-1.png">
 </picture>
@@ -311,53 +310,50 @@ Valid till: 2025-09-22 23:59:59.999 +0000 UTC
   <img alt="image" src="./assets/images/agent-2.png">
 </picture>
 
-
-```sh
-
-# Copy the one-liner command, paste into the console, with small manual update to enable the INFRA mode, 
-# by adding the -m infra part – note: the default will be APM mode which is not a desired 
-# mode for self-monitoring:
-```
+Copy the one-liner command, paste into the console, with small manual update to enable the INFRA mode, 
+by adding the -m infra part – note: the default will be APM mode which is not a desired 
+mode for self-monitoring:
 
 <picture>
   <img alt="image" src="./assets/images/agent-3.png">
 </picture>
 
-```sh
-# The output might look like this:
+The output might look like this:
 
-```
 <picture>
   <img alt="image" src="./assets/images/agent-4.png">
 </picture>
 
+The agent will be enabled, up and running by default. Or we can enable and start it manually, if not.
+Have a check by using “systemctl” CLI:
+
 ```sh
-# The agent will be enabled, up and running by default. Or we can enable and start it manually, if not.
-# Have a check by using “systemctl” CLI:
-
 $ sudo systemctl is-enabled instana-agent
+```
 
-# Or we can enable and start it manually 
+Or we can enable and start it manually 
+```sh
 $ sudo systemctl enable instana-agent 
 $ sudo systemctl start instana-agent 
 $ sudo systemctl status instana-agent
-
-
 ```
 
 ## 8.2 Further Configure Agent
 
+
+It’s a good practice to configure the zone info of the agent so that 
+the host can be grouped properly within the Infrastructure View.
+And I would consider having separated configuration files for specific 
+custom configuration sections is a good practice too – these configuration 
+files will be hot-reloaded by Instana agent without a need 
+to restart the agent, which is super cool!
+
+Configure zone
 ```sh
-# It’s a good practice to configure the zone info of the agent so that 
-# the host can be grouped properly within the Infrastructure View.
-# And I would consider having separated configuration files for specific 
-# custom configuration sections is a good practice too – these configuration 
-# files will be hot-reloaded by Instana agent without a need 
-# to restart the agent, which is super cool!
-
-# Configure zone
 sudo touch /opt/instana/agent/etc/instana/configuration-zone.yaml
+```
 
+```sh
 INSTANA_ZONE="InstanaServer" && \
 cat <<EOF | sudo tee /opt/instana/agent/etc/instana/configuration-zone.yaml
 # Hardware & Zone
@@ -365,11 +361,15 @@ com.instana.plugin.generic.hardware:
   enabled: true
   availability-zone: "${INSTANA_ZONE}"
 EOF
+```
 
-# (optional) Configure host, like tags
-# Do change them accordingly
+(optional) Configure host, like tags
+Do change them accordingly
+```sh
 sudo touch /opt/instana/agent/etc/instana/configuration-host.yaml
+```
 
+```sh
 cat <<EOF | sudo tee /opt/instana/agent/etc/instana/configuration-host.yaml
 # Host
 com.instana.plugin.host:
@@ -377,19 +377,23 @@ com.instana.plugin.host:
     - 'poc'
     - 'instana'
 EOF
+```
 
+```sh
 sudo instana update -f settings.hcl
+```
 
-# If there is a need to uninstall agent
+If there is a need to uninstall agent
+```sh
 apt list --installed | grep instana-agent
 
 sudo apt-get purge <package_name>
 ```
 
+Set up the proper EUM endpoint which will proxy to the :2999 internal port
+DO REPLACE IT WITH YOUR ENDPOINT!!!
+Ref: https://www.ibm.com/docs/en/obi/current?topic=installer-configuring-end-user-monitoring
 ```sh
-# Set up the proper EUM endpoint which will proxy to the :2999 internal port
-# DO REPLACE IT WITH YOUR ENDPOINT!!!
-# Ref: https://www.ibm.com/docs/en/obi/current?topic=installer-configuring-end-user-monitoring
 EUM_ENDPOINT="https://168.1.53.216.nip.io:446" && \
 cat | sudo tee -a settings.hcl <<EOF
 eum {

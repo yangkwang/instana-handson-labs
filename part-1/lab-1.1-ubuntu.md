@@ -248,10 +248,10 @@ After around 30 min, depending on your download speed as it will download all In
 </picture>
 
 ## 6. First login
-```sh
-# By following the info printed out once the installation is done, we can login to Instana:
-# Launch from browser: https://<Instana Server IP>.nip.io
-```
+
+By following the info printed out once the installation is done, we can login to Instana:
+Launch from browser: https://<Instana Server IP>.nip.io
+
 <picture>
   <img alt="image" src="./assets/images/firstlogin-1.png">
 </picture>
@@ -266,15 +266,28 @@ Click “Go to instana!” button to start with the journey:
 
 ## 7. License
 
-```sh
 # Download license
+```sh
 $ sudo instana license download
+```
 
-# Now import it
+Now import it
+```sh
 $ sudo instana license import -f license
+```
 
-# And verify it
+And verify it
+```sh
 $ sudo instana license verify
+```
+
+```sh
+Output:
+
+Verifying local license status ✓
+Nr: 1
+Valid from: 2022-09-22 00:00:00 +0000 UTC
+Valid till: 2025-09-22 23:59:59.999 +0000 UTC
 ```
 
 ## 8. Post Actions

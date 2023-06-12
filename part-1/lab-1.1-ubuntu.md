@@ -64,10 +64,15 @@ sudo mkfs -t ext4 /dev/xvde1
 
 ```sh
 sudo mount -t ext4 /dev/xvde1 /opt
+```
 
+```sh
 vi /etc/fstab
-     /dev/xvde1 /opt ext4 defaults,noatime 0 0
+```
 
+Append the following line:
+```sh
+     /dev/xvde1 /opt ext4 defaults,noatime 0 0
 ```
 <picture>
   <img alt="image4" src="./assets/images/fstab.png">
@@ -90,21 +95,21 @@ Test the connectivity
 Make sure the netcat is installed
 
 ```sh
-$ sudo apt-get install netcat
-$ nc -vz auth-infra.instana.io 443
+sudo apt-get install netcat
+nc -vz auth-infra.instana.io 443
 ```
 
 Mount or simply create some data folders for simplicity purposes
 ```sh
-$ sudo mkdir /opt/{data,metrics,traces}
-$ sudo mkdir /opt/log
-$ sudo mkdir /opt/log/instana
+sudo mkdir /opt/{data,metrics,traces}
+sudo mkdir /opt/log
+sudo mkdir /opt/log/instana
 ```
 
 TLS
 ```sh
-$ sudo curl -sLO https://github.com/FiloSottile/mkcert/releases/download/v1.4.3/mkcert-v1.4.3-linux-amd64
-$ sudo chmod +x mkcert-v1.4.3-linux-amd64 && sudo mv mkcert-v1.4.3-linux-amd64 /usr/local/bin/mkcert
+sudo curl -sLO https://github.com/FiloSottile/mkcert/releases/download/v1.4.3/mkcert-v1.4.3-linux-amd64
+sudo chmod +x mkcert-v1.4.3-linux-amd64 && sudo mv mkcert-v1.4.3-linux-amd64 /usr/local/bin/mkcert
 ```
 
 Create a TLS key pair with <INSTANA SERVER IP>.nip.io as its CN
@@ -113,7 +118,7 @@ or skip this if you're going to use your key pair
 > NOTE: PLEASE CHANGE TO YOUR IP
 
 ```sh
-$ INSTANA_SERVER_IP=<Instana Server ip address> && \
+INSTANA_SERVER_IP=<Instana Server ip address> && \
   sudo mkcert -cert-file tls.crt -key-file tls.key "${INSTANA_SERVER_IP}.nip.io" "${INSTANA_SERVER_IP}"
 ```
 
@@ -125,14 +130,14 @@ NOTE : take note of the path to tls.crt (signed certificate file) and tls.key (p
 
 Remove some legacy components, if any
 ```sh
-$ sudo apt-get remove docker docker-engine docker.io containerd runc
+sudo apt-get remove docker docker-engine docker.io containerd runc
 ```
 
 It is O.K if you see "Unable to locate package docker-engine"
 
 If there is a need to purge the previous failed Docker install
 ```sh
-$ sudo apt-get purge docker-ce docker-ce-cli containerd.io
+sudo apt-get purge docker-ce docker-ce-cli containerd.io
 ```
 
 Update the apt package index and install packages to allow apt to use a repository over HTTPS:
@@ -268,17 +273,17 @@ Click “Go to instana!” button to start with the journey:
 
 # Download license
 ```sh
-$ sudo instana license download
+sudo instana license download
 ```
 
 Now import it
 ```sh
-$ sudo instana license import -f license
+sudo instana license import -f license
 ```
 
 And verify it
 ```sh
-$ sudo instana license verify
+sudo instana license verify
 ```
 
 ```sh
@@ -328,14 +333,14 @@ The agent will be enabled, up and running by default. Or we can enable and start
 Have a check by using “systemctl” CLI:
 
 ```sh
-$ sudo systemctl is-enabled instana-agent
+sudo systemctl is-enabled instana-agent
 ```
 
 Or we can enable and start it manually 
 ```sh
-$ sudo systemctl enable instana-agent 
-$ sudo systemctl start instana-agent 
-$ sudo systemctl status instana-agent
+sudo systemctl enable instana-agent 
+sudo systemctl start instana-agent 
+sudo systemctl status instana-agent
 ```
 
 ## 8.2 Further Configure Agent

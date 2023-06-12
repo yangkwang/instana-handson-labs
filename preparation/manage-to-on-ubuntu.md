@@ -99,6 +99,7 @@ Mount or simply create some data folders for simplicity purposes
 $ sudo mkdir /opt/{data,metrics,traces}
 $ sudo mkdir /opt/log
 $ sudo mkdir /opt/log/instana
+```
 
 TLS
 ```sh

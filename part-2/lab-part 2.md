@@ -497,67 +497,171 @@ kubectl get pod -n instana-agent
   <img alt="image3" src="./assets/images/k8sPod.png">
 </picture>
 
+## 3. skip 
 
+## 4. skip
+
+## 5. Linux VM agent – Generate agent installation script
+
+It’s also very common to monitor VMs, and the software (e.g. middleware, databases, apps) and the processes inside.
+To do that, we can generate the one-liner installation script from Instana UI too. Check the “Silent” option to install agent without a prompt.
+
+<picture>
+  <img alt="image3" src="./assets/images/vmAgentScript.png">
+</picture>
 
 ## 6. Linux VM agent – Install agent
 
+There is a list of supported Linux distros and versions:
+- Supported operating systems
+- Ubuntu Linux 14.04 (trusty)
+- Ubuntu Linux 16.04 (xenial)
+- Ubuntu Linux 18.04 (beaver)
+- Ubuntu Linux 20.04 (focal)
+- CentOS 6 1
+- CentOS 7
+- CentOS 8
+- Debian 9 (stretch)
+- Debian 10 (buster)
+- Suse Linux Enterprise Server (SLES) 12 2
+- Redhat Enterprise Linux (RHEL) 6 1
+- Redhat Enterprise Linux (RHEL) 7
+- Redhat Enterprise Linux (RHEL) 8
+- Amazon Linux 1
+- Amazon Linux 2
+
+In the labs, we’ve used footloose to create 2 “VMs” running as containers: one is Ubuntu 18.04 and the other is Centos 7.
+
+Here we use the Ubuntu VM as example, but please feel free to try both. SSH into the VM and run it:
+
 Run this in the Host VM:
 
+
+cd to the home folder
 ```sh
-# cd to the home folder
-$ cd ~
-
-# List out the footloose-powered VMs we have
-$ footloose show -c footloose.yaml
-
-# Log into the Ubuntu VM
-$ footloose ssh root@ubuntu-0 -c footloose.yaml
+cd ~
 ```
+
+List out the footloose-powered VMs we have
+```sh
+footloose show -c footloose.yaml
+```
+<picture>
+  <img alt="image3" src="./assets/images/footlooseShow.png">
+</picture>
+
+
+Log into the Ubuntu VM
+```sh
+footloose ssh root@ubuntu-0 -c footloose.yaml
+```
+
+Run this within the logged-in Ubuntu VM – do remember to use your generated script!
 
 Once SSH'ed into the Ubuntu "VM" powered by `footloose`:
 
+Install some required software components before agent installation
+```sh
+apt-get update
+apt-get install gpg apt-utils -y
 ```
-root@ubuntu-0:~# apt-get update
-root@ubuntu-0:~# apt-get install gpg apt-utils -y
+Paste YOUR generated one-liner installation script and run it
+```sh
+curl -o setup_agent.sh https://setup.instana.io/agent && chmod 700 ./setup_agent.sh && sudo ./setup_agent.sh -a xxxxxxxxxxxxxxxxxx -d xxxxxxxxxxxxxxxxxx -t dynamic -e <Instana Server IP>.nip.io:1444 -y 
+```
 
-root@ubuntu-0:~# curl -o setup_agent.sh https://setup.instana.io/agent && chmod 700 ./setup_agent.sh && sudo ./setup_agent.sh -a xxxxxxxxxxxxxxxxxx -d xxxxxxxxxxxxxxxxxx -t dynamic -e 168.1.53.231.nip.io:1444 -y 
-```
-
-```
-# By default, the agent is not up and running after installation
+## 7. Linux VM agent – Configure agent
+By default, the agent is not up and running after installation
+```sh
 root@ubuntu-0:~# systemctl status instana-agent
 ```
 
-```
-# If needed to uninstall the agent
+If needed to uninstall the agent
+```sh
 apt list --installed | grep instana-agent
 sudo apt-get purge <package_name>
-
 ```
 
+It’s actually ready to start but having some initial configuration might be a good idea. For example, let’s set the Zone as the same as our Kubernetes/OpenShift’s – Do remember to replace INSTANA_ZONE="<YOUR ZONE NAME>" with your preferred Zone name.
+
+Configure Zone
+```sh
+touch /opt/instana/agent/etc/instana/configuration-zone.yaml 
+INSTANA_ZONE="Student-1-Zone" && \
+cat <<EOF | sudo tee /opt/instana/agent/etc/instana/configuration-zone.yaml
+# Hardware & Zone
+com.instana.plugin.generic.hardware:
+  enabled: true
+  availability-zone: "${INSTANA_ZONE}" 
+EOF
 ```
-# Log into the Centos VM
-$ footloose ssh root@centos-0 -c footloose.yaml
+
+Configure host, like tags
+```sh
+touch /opt/instana/agent/etc/instana/configuration-host.yaml
+cat <<EOF | sudo tee /opt/instana/agent/etc/instana/configuration-host.yaml 
+# Host
+com.instana.plugin.host: 
+  tags:
+    - 'labs'
+    - 'poc'
+    - 'instana'
+EOF
+```
+
+## 8. Linux VM agent – Enable and Start Agent
+Start it up
+```sh
+systemctl start instana-agent
+```
+
+We can trace the logs by journalctl CLI
+```sh
+journalctl -flu instana-agent
+```
+
+Note: you may install some software even after the agent is installed and configured. The agent will be smart enough to discover and collect the right monitoring data, thanks to the sensors, for all supported technologies. For example, you may install apache, and/or MySQL there.
+
+Install & Start apache2
+
+```sh
+apt-get install -y apache2 
+systemctl start apache2
+```
+
+Install Agent in the Centos VM.
+
+Log into the Centos VM
+```sh
+footloose ssh root@centos-0 -c footloose.yaml
+```
+
+There is missing command in Centos and need to install.
+```sh
 yum install which
-
-root@ubuntu-0:~# curl -o setup_agent.sh https://setup.instana.io/agent && chmod 700 ./setup_agent.sh && sudo ./setup_agent.sh -a xxxxxxxxxxxxxxxxxx -d xxxxxxxxxxxxxxxxxx -t dynamic -e 168.1.53.231.nip.io:1444 -y
+```
+Install the agent.
+```sh
+curl -o setup_agent.sh https://setup.instana.io/agent && chmod 700 ./setup_agent.sh && sudo ./setup_agent.sh -a xxxxxxxxxxxxxxxxxx -d xxxxxxxxxxxxxxxxxx -t dynamic -e <Isntana Server IP>.nip.io:1444 -y
 ```
 
-```
-# Configure zone
-root@ubuntu-0:~# touch /opt/instana/agent/etc/instana/configuration-zone.yaml
-root@ubuntu-0:~# INSTANA_ZONE="Student-1-Zone" && \
+Configure zone
+```sh
+touch /opt/instana/agent/etc/instana/configuration-zone.yaml
+INSTANA_ZONE="Student-1-Zone" && \
 cat <<EOF | sudo tee /opt/instana/agent/etc/instana/configuration-zone.yaml
 # Hardware & Zone
 com.instana.plugin.generic.hardware:
   enabled: true
   availability-zone: "${INSTANA_ZONE}"
 EOF
+```
 
-# (optional) Configure host, like tags
-# Do change them accordingly
-root@ubuntu-0:~# touch /opt/instana/agent/etc/instana/configuration-host.yaml
-root@ubuntu-0:~# cat <<EOF | sudo tee /opt/instana/agent/etc/instana/configuration-host.yaml
+(optional) Configure host, like tags
+Do change them accordingly
+```sh
+touch /opt/instana/agent/etc/instana/configuration-host.yaml
+cat <<EOF | sudo tee /opt/instana/agent/etc/instana/configuration-host.yaml
 # Host
 com.instana.plugin.host:
   tags:
@@ -567,12 +671,41 @@ com.instana.plugin.host:
 EOF
 ```
 
+Start it up
+```sh
+systemctl enable instana-agent
+systemctl start instana-agent
 ```
-# Start it up
-root@ubuntu-0:~# systemctl enable instana-agent
-root@ubuntu-0:~# systemctl start instana-agent
 
-# We can trace the logs too
-root@ubuntu-0:~# journalctl -flu instana-agent
+We can trace the logs too
+```sh
+journalctl -flu instana-agent
 ```
+
+## 9. View them in the infrastructure view
+
+
+<picture>
+  <img alt="image3" src="./assets/images/InfraView.png">
+</picture>
+
+Within this very cool Infrastructure View, we can “query” things with a very
+simple lucene query syntax.
+For example, we can simply key in “Student” in the filter box and it will
+show only something match the keyword, which is a zone:
+
+<picture>
+  <img alt="image3" src="./assets/images/infraQuery.png">
+</picture>
+
+And we can use “advanced” filters too, like “entity.zone:"Student*" and “entity.type:httpd” so that we can precisely locate/query desired objects within our IT landscape:
+
+<picture>
+  <img alt="image3" src="./assets/images/infraAdvanceFilter.png">
+</picture>
+
+Furthermore, you can save some useful filters too so that you can reuse it in the future, anytime.
+
+
+
 

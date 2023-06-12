@@ -7,7 +7,7 @@ The architecture of these labs can be illustrated like this:
   <img alt="image" src="./assets/images/architecture.png">
 </picture>
 
-**Each student will have two VMs running Ubuntu on IBM Cloud.**
+**Each student will have two VMs running Ubuntu on IBM Cloud. Access to the VM is via ssh using a cert key**
 
 **Hardware Specs**
 
@@ -33,12 +33,12 @@ Preferably an Ubuntu (e.g. 18.04 / 20.04) VM with 8+ CPU, 32+G RAM, 100+G Disks,
 Note: if you prefer your own Linux distribution, instead of documented Ubuntu, it should work too but please adjust the commands accordingly.
 
 
-## 1. Access Manage-to VM
+## Access Manage-to VM
 ```sh
 ssh itzuser@<manage-to ip address> -p 2223 -i <ssh key file>
 ```
 
-## 2. Mount additional disk space
+## Mount additional disk space
 ```sh
 lsblk
 ```
@@ -75,7 +75,7 @@ vi /etc/fstab
 </picture>
 
 
-## 4. Install Docker
+## Install Docker
 
 Remove some legacy components, if any
 ```sh
@@ -151,6 +151,10 @@ Have a try for Docker
 sudo docker run hello-world
 ```
 
+<picture>
+  <img alt="image4" src="./assets/images/dockerSuccess.png">
+</picture>
+
 Add current user into docker group so that we can run Docker cli without the need of sudo
 ```sh
 sudo usermod -aG docker $USER
@@ -160,15 +164,6 @@ sudo usermod -aG docker $USER
 
 ```sh
 # Try running docker without sudo
-docker run hello-world
-```
-
-sudo systemctl stop docker
-sudo mv /var/lib/docker/ /opt/docker
-sudo ln -s /opt/docker /var/lib/docker
-
-sudo systemctl start docker
-
 docker run hello-world
 ```
 
@@ -182,10 +177,10 @@ chmod +x ./kind
 sudo mv ./kind /usr/local/bin/kind
 ```
 
+Check the version
+Should see something like: 
+kind v0.16.0 go1.19.1 linux/amd64
 ```sh
-# Check the version
-# Should see something like: 
-# kind v0.16.0 go1.19.1 linux/amd64
 kind --version
 ```
 
@@ -197,50 +192,52 @@ chmod +x footloose
 sudo mv footloose /usr/local/bin/
 ```
 
+Check the version
+Should see something like: 
+version: 0.6.3
 ```sh
-# Check the version
-# Should see something like: 
-# version: 0.6.3
 footloose version
 ```
 
 3. Other tools
 
+kubectl
 ```sh
-# kubectl
 curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
 chmod +x kubectl
 sudo mv kubectl /usr/local/bin/
 ```
 
+Check the version
+should see output like: 
+Client Version: v1.25.2
+Kustomize Version: v4.5.7
 ```sh
-# Check the version
-# should see output like: 
-# Client Version: v1.25.2
-# Kustomize Version: v4.5.7
 kubectl version --short --client
 ```
 
+Helm CLI
 ```sh
-# Helm CLI
 curl https://baltocdn.com/helm/signing.asc | sudo apt-key add -
 echo "deb https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
 sudo apt-get update
 sudo apt-get install -y helm
 ```
 
+
+Check the version
+should see output like: 
+v3.9.4+gdbc6d8e
 ```sh
-# Check the version
-# should see output like: 
-# v3.9.4+gdbc6d8e
 helm version --short
 ```
 
 ## Spin up Kubernetes cluster
 
+
+Customize a kind-config.yaml file with 1 master 3 worker nodes
+You may spin up a minium cluster simply by: kind create cluster
 ```sh
-# Customize a kind-config.yaml file with 1 master 3 worker nodes
-# You may spin up a minium cluster simply by: kind create cluster
 $ cat > kind-config.yaml <<EOF
 kind: Cluster
 apiVersion: kind.x-k8s.io/v1alpha4
@@ -250,9 +247,11 @@ nodes:
 - role: worker
 - role: worker
 EOF
+```
 
-# Create the cluster using the file
-# This make take a 2-10 minutes depending on your download speed
+Create the cluster using the file
+This make take a 2-10 minutes depending on your download speed
+```sh
 $ kind create cluster --config kind-config.yaml
 ```
 
@@ -269,16 +268,21 @@ Creating cluster "kind" ...
  ✓ Joining worker nodes 🚜
 Set kubectl context to "kind-kind"
 You can now use your cluster with:
-
+```
+```sh
 kubectl cluster-info --context kind-kind
-
+```
+```sh
 Not sure what to do next? 😅  Check out https://kind.sigs.k8s.io/docs/user/quick-start/
 ```
 
+
+Verify the cluster
+Note: the nodes might be in “NotReady”, just wait for a while
 ```sh
-# Verify the cluster
-# Note: the nodes might be in “NotReady”, just wait for a while
 $ kubectl get nodes
+```
+```sh
 NAME                 STATUS   ROLES           AGE   VERSION
 kind-control-plane   Ready    control-plane   83s   v1.25.2
 kind-worker          Ready    <none>          51s   v1.25.2
@@ -288,8 +292,9 @@ kind-worker3         Ready    <none>          64s   v1.25.2
 
 ## Spin up “VM”s
 
-```sh
+
 Create a YAML to define our VMs
+```sh
 $ cat > footloose.yaml <<EOF
 cluster:
   name: labs
@@ -320,12 +325,18 @@ machines:
     - type: volume
       destination: /var
 EOF
+```
 
-# Create a dedicated Docker network
+Create a dedicated Docker network
+```sh
 $ docker network create footloose-cluster
+```
 
-# Spin up VMs
+Spin up VMs
+```sh
 $ footloose create -c footloose.yaml
+```
+
 INFO[0000] Docker Image: quay.io/footloose/ubuntu18.04 present locally
 INFO[0000] Docker Image: quay.io/footloose/centos7 present locally
 INFO[0000] Creating machine: labs-ubuntu-0 ...
@@ -333,14 +344,20 @@ INFO[0000] Connecting labs-ubuntu-0 to the footloose-cluster network...
 INFO[0001] Creating machine: labs-centos-0 ...
 INFO[0001] Connecting labs-centos-0 to the footloose-cluster network...
 
-# Check it out
+Check it out
+```sh
 $ footloose show -c footloose.yaml
+```
+
 NAME            HOSTNAME   PORTS           IP   IMAGE                           CMD          STATE     BACKEND
 labs-ubuntu-0   ubuntu-0   0->{22 49154}        quay.io/footloose/ubuntu18.04   /sbin/init   Running
 labs-centos-0   centos-0   0->{22 49155}        quay.io/footloose/centos7       /sbin/init   Running
 
-# Log into any of the VMs
+Log into any of the VMs
+```sh
 $ footloose ssh root@ubuntu-0 -c footloose.yaml
+```
+
 Welcome to Ubuntu 18.04.5 LTS (GNU/Linux 4.15.0-144-generic x86_64)
 
  * Documentation:  https://help.ubuntu.com
@@ -358,6 +375,7 @@ individual files in /usr/share/doc/*/copyright.
 Ubuntu comes with ABSOLUTELY NO WARRANTY, to the extent permitted by
 applicable law.
 
+```sh
 root@ubuntu-0:~# exit
 
 ```

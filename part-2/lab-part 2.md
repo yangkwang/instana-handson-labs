@@ -706,6 +706,80 @@ And we can use “advanced” filters too, like “entity.zone:"Student*" and �
 
 Furthermore, you can save some useful filters too so that you can reuse it in the future, anytime.
 
+<picture>
+  <img alt="image3" src="./assets/images/saveFilter.png">
+</picture>
 
+## 10. Search the agents by our Zone’s keyword
+
+Click “More” -> “Agents”, we can see all agents deployed.
+
+<picture>
+  <img alt="image3" src="./assets/images/allAgents.png">
+</picture>
+
+And you may use the same mechanism/syntax to filter agents too. For
+example, try typing “Student”.
+
+<picture>
+  <img alt="image3" src="./assets/images/filterAgents.png">
+</picture>
+
+## 11. Dive deeper into the agent
+
+Let’s filter and click the ubuntu0 agent – well, actually any agent is fine:
+
+<picture>
+  <img alt="image3" src="./assets/images/ubuntuAgent.png">
+</picture>
+
+There are 3 Agent modes: Disabled, Infrastructure and APM. APM is the default.
+
+
+<picture>
+  <img alt="image3" src="./assets/images/agentMode.png">
+</picture>
+
+There are two log levels for agent: INFO, DEBUG. Default is INFO.
+
+
+<picture>
+  <img alt="image3" src="./assets/images/agentLogLevel.png">
+</picture>
+
+We also can update, reset, and reboot the agent from Instana UI.
+
+<picture>
+  <img alt="image3" src="./assets/images/agentUIAction.png">
+</picture>
+
+Sensors are the “plugin”s within the one-agent design of Instana Agent, and there are hundreds of supported sensors for the supported technologies and they’re growing along the days:
+
+
+<picture>
+  <img alt="image3" src="./assets/images/sensors.png">
+</picture>
+
+Instana provides Git-based configuration management, aka GitOps, experience too by simply specifying the remote Git repo. How this Git repo should look like? Have a look at this extremely simple Git repo sample: https://github.com/brightzheng100/instana-gitops-sample. Or check out this official doc namely “Git-based configuration management” for details.
+
+
+<picture>
+  <img alt="image3" src="./assets/images/gitConfig.png">
+</picture>
+
+Instana also provides rich feature for agent’s self-monitoring, with logs:
+
+<picture>
+  <img alt="image3" src="./assets/images/selfMonitoring.png">
+</picture>
+
+**Takeaways**
+As you could see from this lab, Instana helps SRE/operator generate the agent installation script with a similar one-liner experience, which removes the pain while rolling out to more and more VMs, Kubernetes clusters and/or other supported platforms. Don’t forget, there is always a way to automate the installation by using IT automation tools like Ansible, Puppet, or Chef, or anything you prefer.
+
+Bright Zheng has co-authored an article, with a Red Hatter in APAC region, to cover the synergy between Instana and Ansible, do check it out too to see how real world use cases can be easily addressed: https://developer.ibm.com/articles/automation-powered-aiops/
+
+And the powerful architecture of one-agent, with the huge ecosystem of the sensors for hundreds of supported technologies brings in intelligent discovery for any potential technologies we adopt along the way, without a need to re- configure from time to time, which dramatically reduces the operational effort. You may check out this doc for currently supported technologies: https://www.instana.com/docs/ecosystem/
+
+The out-of-the-box integration of Git repo enables us to embrace GitOps for a better day 2 configuration management experience.
 
 

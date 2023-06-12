@@ -12,6 +12,7 @@ Currently, there are quite some deployment patterns for Instana, which include:
 And this doc focuses on option #1, which is “1. All-in-one single-VM setup”, on Ubuntu.
 
 **VM Specs**
+
 The minimum VM specs are:
   - 12 vCPU
   - 48G RAM

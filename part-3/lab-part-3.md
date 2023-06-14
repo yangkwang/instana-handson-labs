@@ -216,7 +216,13 @@ For those dynamic programming languages like Java, Python, PHP, Node.js etc., we
 
 8. Figure out how Instana handles event with more findings
 
+If you go back to “Issue” page and filter by the same filters, you might be surprised that the “Issue” might be gone, especially when you select a smaller time window, say “Last 5 minutes”. Why?
 
+If you recall the Event rule that detected the issue, which was “Sudden increase in the number of erroneous calls”, when such erroneous calls become a “new normal”, this rule would have become not true.
+
+Let’s take a deeper look at this Event rule:
+- Filter with “built-in” rule, with search keyword of “Sudden increase in erroneous call rate”
+- Pick the one with “Service” type
 
 
 

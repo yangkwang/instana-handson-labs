@@ -17,9 +17,9 @@ In Instana, there are 3 types of events: incidents, issues and changes.
 
 Goal
 
-1. To understand the mechanisms Instana offers for anomaly detection
-2. To walk through a typical troubleshooting process
-3. To understand how to customize Event rules
+  1. To understand the mechanisms Instana offers for anomaly detection
+  2. To walk through a typical troubleshooting process
+  3. To understand how to customize Event rules
 
 Steps
 
@@ -31,16 +31,85 @@ In the landing page of Instana, it will highlight if there are any incidents:
   <img alt="image3" src="./assets/images/incident.png">
 </picture>
 
+On the menu item of “Events”:
+
+<picture>
+  <img alt="image3" src="./assets/images/events.png">
+</picture>
+
+Or embedded within the services:
+
+<picture>
+  <img alt="image3" src="./assets/images/eventInService.png">
+</picture>
+
+Setting up alert rules and alert channels can be a handy way too to stay informed:
+
+<picture>
+  <img alt="image3" src="./assets/images/alerts.png">
+</picture>
+
+2. Explore the Instana Events
+
+We can click the “Events” menu item to see all aggregated events. Default is the incident view:
+
+<picture>
+  <img alt="image3" src="./assets/images/incidentView.png">
+</picture>
+
+If you click the incident, you will see something like this, where it captures all the important correlated elements:
+
+<picture>
+  <img alt="image3" src="./assets/images/correlatedElement.png">
+</picture>
 
 
+Click “All” to see all events from all types:
+
+<picture>
+  <img alt="image3" src="./assets/images/allEvents.png">
+</picture>
+
+Click “Issues” to see issues detected:
+
+<picture>
+  <img alt="image3" src="./assets/images/issues.png">
+</picture>
+
+Click any of the issues, we can see much more details with evidence too:
+
+<picture>
+  <img alt="image3" src="./assets/images/issuesDetails.png">
+</picture>
+
+Click “Changes” to see changes detected:
+
+<picture>
+  <img alt="image3" src="./assets/images/changes.png">
+</picture>
+
+Click any of the changes, we can see details like what are changed, and when:
+
+<picture>
+  <img alt="image3" src="./assets/images/changeDetail.png">
+</picture>
 
 
+3. Browse the built-in event rules
 
+Built-in events are predefined health signatures based on integrated algorithms which help you to understand the health of your monitored system in real-time. There are hundreds of built-in event use cases and rules, please refer to this link for what they are: https://www.ibm.com/docs/en/instana-observability/current?topic=references- built-in-events-reference. Please note that, these built-in event rules not only cover the generic use cases, but also embed a lot of SRE knowledge and practices too for every specific component like public clouds, language runtimes, middleware, databases, etc.
 
-## 4. Let’s purposely “inject” some issues
+<picture>
+  <img alt="image3" src="./assets/images/eventRules.png">
+</picture>
+
+4. Let’s purposely “inject” some issues
+
+We can achieve that by updating the “load-gen” we installed in “Lab2 – Website Monitoring”:
+
+Deploy the load-gen App
 
 ```sh
-# Deploy the load-gen App
 $ kubectl -n robot-shop apply -f - <<EOF
 apiVersion: apps/v1
 kind: Deployment
@@ -72,6 +141,83 @@ spec:
         image: robotshop/rs-load:latest
 EOF
 ```
+5. Let’s see what Instana has detected
+
+Click the Application icon, filter by our application’s name, and click to open the AP dashboard:
+
+<picture>
+  <img alt="image3" src="./assets/images/appDashboard.png">
+</picture>
+
+We can see the erroneous calls:
+
+<picture>
+  <img alt="image3" src="./assets/images/errorCall.png">
+</picture>
+
+And yes, it’s detected – to avoid the noise, you can filter the issues too:
+
+<picture>
+  <img alt="image3" src="./assets/images/filterIssue.png">
+</picture>
+
+
+Click the issue to see more details:
+
+- The title of “Sudden increase in the number of erroneous calls” is already quite meaningful, with a tag of “SERVICE IMPACT” – yes, this case is service level, the calls to “POST /pay/partner-57” is intentionally erroneous
+- There is a start and end time. Since this issue is new and still active, no end time
+- The description provides more accurate info: Absolute change: 25%
+- The metrics as a way to illustrate the change visually
+
+<picture>
+  <img alt="image3" src="./assets/images/suddenIncrease.png">
+</picture>
+
+
+7. Click to analyze the erroneous calls
+
+It will automatically populate the filter for what we care, and identify that
+these issues come from one Endpoint with pattern of “POST /pay/{id}”:
+
+<picture>
+  <img alt="image3" src="./assets/images/analyseErr.png">
+</picture>
+
+Click the Endpoint to list out all erroneous calls – in this case all are “POST /pay/partner-57” from time to time:
+
+<picture>
+  <img alt="image3" src="./assets/images/allEndPoints.png">
+</picture>
+
+Click any of them and we will be redirected to the detailed call analytics, where we can see trace, timeline, service endpoint list, calls and logs as a whole context:
+
+<picture>
+  <img alt="image3" src="./assets/images/detailCall.png">
+</picture>
+
+From this view, we can clearly see the how these services are interacted and what caused the issue:
+
+<picture>
+  <img alt="image3" src="./assets/images/causeOfIssue.png">
+</picture>
+
+From the right side, we even can see the infrastructure underneath, and the stack trace for what exactly caused the issue, if any!
+
+<picture>
+  <img alt="image3" src="./assets/images/stackTrace.png">
+</picture>
+
+For those dynamic programming languages like Java, Python, PHP, Node.js etc., we even can tell “which line of code caused the issue”:
+
+<picture>
+  <img alt="image3" src="./assets/images/code.png">
+</picture>
+
+
+8. Figure out how Instana handles event with more findings
+
+
+
 
 
 

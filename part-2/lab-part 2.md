@@ -1145,7 +1145,109 @@ For example, we can easily search and filter out our hosts, by: entity.zone:stud
 
 4. Monitor Containers
 
+To provide visibility and insight into containerized environments, Instana automatically discovers and monitors Docker containers.
+Instana supports many of the widely adopted container runtimes:
+- Containerd
+- CRI-O
+- Docker
+- Garden
+- Linux Containers (LXC)
 
+Click “Infrastructure” menu item to navigate to Infrastructure view. Key in part of our Zone’s name, e.g. “student”, to filter out the infrastructure and then zoom in to a comfortable size.
 
+<picture>
+  <img alt="image3" src="./assets/images/infraMapStudent.png">
+</picture>
 
+There are many layers in the boxes that indicate different discovered technologies.
+
+<picture>
+  <img alt="image3" src="./assets/images/infraLayer.png">
+</picture>
+
+We can literarily click any of them. Remember, if the technology is supported, it will be explicitly mentioned otherwise it can be a “normal” containerd container as Kubernetes’s default CRI engine is containerd:
+
+<picture>
+  <img alt="image3" src="./assets/images/infraContainer.png">
+</picture>
+
+Let’s pick an identified container, say “Spring Boot App: shipping service 1.0”
+– again, pick whatever you want to explore. Instana will pop up a window to show more info and you may have realized that there are layers of buttons. In this case there are layers of container -> Pod -> Node -> VM Host.
+
+<picture>
+  <img alt="image3" src="./assets/images/infraSpringBoot.png">
+</picture>
+
+Click the “Open Dashboard” button, it will open the responding dashboard:
+
+<picture>
+  <img alt="image3" src="./assets/images/openDashboard.png">
+</picture>
+
+We can click browser’s “Back” button, or simply click the “Infrastructure” menu bar gain, it will remember where we were. Now let’s click the “JVM” button to navigate down one more layer. If there is any issue, it will highlight here as well:
+
+<picture>
+  <img alt="image3" src="./assets/images/infraJVM.png">
+</picture>
+
+Click the “Open Dashboard”, we will see more precise metrics, which are
+JVM-oriented ones here, visualized in the responsive dashboard:
+
+<picture>
+  <img alt="image3" src="./assets/images/dashboardJVM.png">
+</picture>
+
+So it’s like we’re peeling the onion and you can explore different layers to
+see what metrics and insights the built-in dashboards can offer.
+
+5. Navigate through the infrastructure layers
+
+We can navigate through by clicking different layers, all the way down to the host.
+Click the process item to view the “Java” process:
+
+<picture>
+  <img alt="image3" src="./assets/images/infraProcess.png">
+</picture>
+
+Click the “Containerd” icon:
+
+<picture>
+  <img alt="image3" src="./assets/images/infraContainerd.png">
+</picture>
+
+Click the “Pod” icon:
+
+<picture>
+  <img alt="image3" src="./assets/images/infraPod.png">
+</picture>
+
+Click the “Node” icon:
+
+<picture>
+  <img alt="image3" src="./assets/images/infraNode.png">
+</picture>
+
+Click the “Linux” host icon:
+
+<picture>
+  <img alt="image3" src="./assets/images/infraLinux.png">
+</picture>
+
+Remember, any of the layers will offer a default dashboard with corresponding metrics. For example, we can click the “Open Dashboard” button on above Linux Host’s layer and we will see a series of comprehensive metrics visualized properly for us:
+
+<picture>
+  <img alt="image3" src="./assets/images/comprehensiveMetrics.png">
+</picture>
+
+And the Instana dynamic graph can still show us more contextual info if you
+click the “Stack” and “Upstream/Downstream” button:
+
+<picture>
+  <img alt="image3" src="./assets/images/stack.png">
+</picture>
+
+**Takeaways**
+
+As you could see from this lab, Instana provides a bird-eye view for the complete infrastructure we’re monitoring where we can easily filter and visualize the objects we care and the performance they’re now on – this gives us an easy way to locate the bottleneck even within a big infrastructure footprint.
+With the built-in dynamic graph, we can easily navigate through different layers of technologies within our application stack, be it microservices-based application or traditional one, all the way down to the host. We can dive into each layer to view its dashboard for deeper insights, with complete contextual info on demand.
 

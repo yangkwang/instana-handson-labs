@@ -1008,3 +1008,144 @@ The goal of this lab is:
 
 **Steps**
 
+1. Infrastructure Map
+
+Click “Infrastructure” menu item, the default view of infrastructure is the Infrastructure Map, where shows us a bird-eye view of all the monitored infrastructure objects, grouped by Zones – for those infrastructure elements that don’t have a zone will be grouped by a zone named “Undefined Zone”.
+
+<picture>
+  <img alt="image3" src="./assets/images/infraMap.png">
+</picture>
+
+The default layout of Infrastructure Map is “zones by name”, and there are
+different ways to rearrange the view.
+For example, clicking the second button namely can rearrange zones as a compact structure:
+
+<picture>
+  <img alt="image3" src="./assets/images/infraMapCompact.png">
+</picture>
+
+Other than the default “Host” perspective, we can switch to “Container”
+perspective too. And the grouping has more options, by:
+
+- Zone, which is the default
+- OS name
+- OS architecture
+- Instance type
+- CPU model
+- CPU count
+- And even by tag prefix that comes from custom tags we’ve defined in agents
+
+<picture>
+  <img alt="image3" src="./assets/images/infraMapTag.png">
+</picture>
+
+This is the view from “Host” perspective and grouping by “OS name”, so we
+can group all our infrastructure hosts by OS names:
+
+<picture>
+  <img alt="image3" src="./assets/images/infraMapOS.png">
+</picture>
+
+This is the view from “Host” perspective and grouping by “CPU model”, so
+we can group all our infrastructure hosts by detailed CPU models:
+
+<picture>
+  <img alt="image3" src="./assets/images/infraMapCPU.png">
+</picture>
+
+Click “Show tags” button can show us all tags within the infrastructure, so having a well-organized tagging system might help us more while monitoring big infrastructure footprint.
+
+<picture>
+  <img alt="image3" src="./assets/images/infraMapShowTag.png">
+</picture>
+
+Click “Show metrics” button can even show us a view with saturation illustration, which can be from CPU and Memory angle. This gives us a high-level view from overall utilization perspective:
+
+<picture>
+  <img alt="image3" src="./assets/images/infraMapUtilization.png">
+</picture>
+
+2. Comparison Table
+
+The Comparison table makes it easy for you to sort and quickly find the servers and boxes that you would like to look at.
+
+<picture>
+  <img alt="image3" src="./assets/images/comparisonTable.png">
+</picture>
+
+The table content can be viewed from different most concerned object types:
+
+<picture>
+  <img alt="image3" src="./assets/images/comparisonTableHost.png">
+</picture>
+
+We can easily click the header element to sort the table. For example, sorting by “CPU Usage” can see which hosts are consuming most of the CPU percentage:
+
+<picture>
+  <img alt="image3" src="./assets/images/comparisonTableHostCPU.png">
+</picture>
+
+And clicking the “Health” can easily find out what hosts are considered not heathy:
+
+<picture>
+  <img alt="image3" src="./assets/images/comparisonTableHostHealth.png">
+</picture>
+
+We can click one or more rows (not the link), which will be highlighted as white background, and pick the metrics to visualize for a quick and easy analysis for selected objects, in this case they’re hosts. Clicking the “Clear Selections” can quickly clean up what we’ve selected:
+
+<picture>
+  <img alt="image3" src="./assets/images/comparisonTableClearMulti.png">
+</picture>
+
+3. Instana Dynamic Focus
+
+The filtering system, which is named “Instana Dynamic Focus”, can be used to filter the 3D maps, comparison tables and incident views.
+
+<picture>
+  <img alt="image3" src="./assets/images/infra3D.png">
+</picture>
+
+The search bar has extensive abilities to search using fuzzy and wildcard searches as well as boolean operators. For example, the following query restricts views to production hosts with less than four CPUs:
+
+```sh
+entity.host.cpu.count:<4 AND entity.zone:production
+```
+
+Dynamic Focus leverages the Lucene query syntax (https://lucene.apache.org/core/2_9_4/queryparsersyntax.html) with the following differences from the Lucene standard:
+- Default operator: AND
+- Syntax constraints: are listed in the documentation (https://ibm.biz/BdyjUx)
+
+The search bar supports autocompletion for search fields and will syntax highlight the Lucene query while you type. Once typing, the search bar will propose search fields that match the current input. You can accept proposed fields by hitting RETURN. Hit CTRL+SPACE to open the auto completion popup.
+
+Here can be a Lucene query syntax cheat sheet:
+
+Fielded search
+```sh
+entity.host.cpu.count:>4
+```
+Boolean operators
+```sh
+entity.host.cpu.count:<4 AND entity.zone:production
+```
+Grouping
+```sh
+(entity.host.cpu.count:<4 AND entity.zone:production) OR entity.host.cpu.count:>4
+```
+
+Wildcard searches 
+```sh
+entity.type:container*
+```
+
+For example, we can easily search and filter out our hosts, by: entity.zone:student\*
+
+<picture>
+  <img alt="image3" src="./assets/images/infraMapFilter.png">
+</picture>
+
+4. Monitor Containers
+
+
+
+
+
